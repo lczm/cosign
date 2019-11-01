@@ -53,8 +53,9 @@ def downscale_base_csv():
 
 # 3. Dataset Download
 def cvt2url(session, scene_no, camera_no=1):
-    return f'http://csr.bu.edu/ftp/asl/asllvd/asl-data2/quicktime/' \
-            '{session}/scene{scene_no}-camera{camera_no}.mov'
+    # return f'http://csr.bu.edu/ftp/asl/asllvd/asl-data2/quicktime/' \
+    #         '{session}/scene{scene_no}-camera{camera_no}.mov'
+    return f'http://csr.bu.edu/ftp/asl/asllvd/asl-data2/quicktime/{session}/scene{scene_no}-camera{camera_no}.mov'
 
 def download_file(url, file_path):
     print(f'Downloading {file_path}')

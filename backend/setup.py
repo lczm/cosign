@@ -136,6 +136,7 @@ def check_overlap_safe(starts, ends):
     return True
 
 def process_data():
+    if not os.path.isdir(DATASET_IMG): os.mkdir(DATASET_IMG)
     data = pd.read_csv(CSV_USER)
     sessions_scenes = data.groupby(['session', 'scene']).size().index
     for index, (session_name, scene_no) in enumerate(sessions_scenes):

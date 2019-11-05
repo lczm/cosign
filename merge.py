@@ -6,6 +6,7 @@ with open('keypoints', 'rb') as file:
     data = pickle.load(file)
 
 store = {}
+keys = set()
 for gloss in df.gloss.unique():
     gloss_store = {}
     store[gloss] = gloss_store
@@ -24,7 +25,10 @@ for gloss in df.gloss.unique():
 
             for frame_no in range(row.start, row.end + 1):
                 key = f'{row.session}-{row.scene}-{frame_no}'
-                row_store.append(data[key])
+                keys.add(key)
+                row_store.append(data[key]['people'][0])
+
+print('Keys Equal:', keys == data.keys())
 
 with open('keypoints2', 'wb') as file:
     pickle.dump(store, file)

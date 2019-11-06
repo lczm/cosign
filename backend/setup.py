@@ -1,7 +1,13 @@
+###  Imports  ###
+import pandas as pd
+import requests
+import cv2
+import os, time
+
 ###  Defaults  ###
-CSV_RAW = 'raw.csv'
-CSV_BASE = 'base.csv'
-CSV_USER = 'user.csv'
+CSV_RAW = os.path.join('dataset/', 'raw.csv')
+CSV_BASE = os.path.join('dataset/', 'base.csv')
+CSV_USER = os.path.join('dataset/', 'user.csv')
 DATASET_VID = 'dataset-vid'
 DATASET_IMG = 'dataset-img'
 
@@ -16,12 +22,6 @@ DOWNLOAD_CHUNK_SIZE = 8192
 DOWNLOAD_TIMEOUT = 5
 PROCESS_FRAME_WIDTH = 640
 PROCESS_FRAME_HEIGHT = 480
-
-###  Imports  ###
-import pandas as pd
-import requests
-import cv2
-import os, time
 
 # 1. CSV Processing
 def process_raw_csv():

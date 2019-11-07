@@ -213,3 +213,9 @@ lint/tmp/
 
 # Editor
 .vscode/
+
+# Files that are too big to keep in the repository
+dataset-img/
+dataset-json/
+dataset-vid/
+dataset-img.7z

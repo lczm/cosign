@@ -1,7 +1,13 @@
+###  Imports  ###
+import pandas as pd
+import requests
+import cv2
+import os, time
+
 ###  Defaults  ###
-CSV_RAW = 'raw.csv'
-CSV_BASE = 'base.csv'
-CSV_USER = 'user.csv'
+CSV_RAW = os.path.join('dataset/', 'raw.csv')
+CSV_BASE = os.path.join('dataset/', 'base.csv')
+CSV_USER = os.path.join('dataset/', 'user.csv')
 DATASET_VID = 'dataset-vid'
 DATASET_IMG = 'dataset-img'
 
@@ -17,12 +23,6 @@ DOWNLOAD_TIMEOUT = 5
 PROCESS_FRAME_WIDTH = 640
 PROCESS_FRAME_HEIGHT = 480
 
-###  Imports  ###
-import pandas as pd
-import requests
-import cv2
-import os, time
-
 # 1. CSV Processing
 def process_raw_csv():
     data = pd.read_csv(
@@ -32,13 +32,16 @@ def process_raw_csv():
     data.rename(inplace=True, columns={
         'Consultant': 'consultant',
         'Main New Gloss': 'gloss',
-        'Gloss Variant': 'gloss_variant',
+        'Gloss Variant': 'variant',
         'Session': 'session', 
         'Scene': 'scene', 
         'Start': 'start', 
         'End': 'end'
     })
     data = data[(data.gloss != '============') & (data.gloss != '------------')]
+    data = data.astype({'scene': int, 'start': float, 'end': float})
+    data = data.round({'start': 0, 'end': 0})
+    data = data.astype({'start': int, 'end': int})
     data.to_csv(CSV_BASE, index=False)
 
 # 2. CSV Downscaling
@@ -53,9 +56,8 @@ def downscale_base_csv():
 
 # 3. Dataset Download
 def cvt2url(session, scene_no, camera_no=1):
-    # return f'http://csr.bu.edu/ftp/asl/asllvd/asl-data2/quicktime/' \
-    #         '{session}/scene{scene_no}-camera{camera_no}.mov'
-    return f'http://csr.bu.edu/ftp/asl/asllvd/asl-data2/quicktime/{session}/scene{scene_no}-camera{camera_no}.mov'
+    return f'http://csr.bu.edu/ftp/asl/asllvd/asl-data2/quicktime/' \
+            '{session}/scene{scene_no}-camera{camera_no}.mov'
 
 def download_file(url, file_path):
     print(f'Downloading {file_path}')

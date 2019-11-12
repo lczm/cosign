@@ -6,4 +6,12 @@
     <string name="start_learning">Start Learning</string>
     <string name="button3">button1</string>
     <string name="button4">button2</string>
+    <string name="title_activity_bottom_navigation">BottomNavigation</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_statitics">Statistics</string>
+    <string name="title_favourite">Favourite</string>
+    <string name="title_statistics">Statistics</string>
+    <string name="title_Profile">Profile</string>
 </resources>

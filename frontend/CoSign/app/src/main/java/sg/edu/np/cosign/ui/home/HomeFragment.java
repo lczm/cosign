@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import sg.edu.np.cosign.R;
@@ -19,7 +21,9 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
 
-    private int[] images = {R.drawable.alphabet, R.drawable.number};
+    private RecyclerView.LayoutManager layoutManager;
+
+    private int[] images = {R.drawable.alphabet_finaledit, R.drawable.number_finaledit};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -27,7 +31,8 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(this).get(sg.edu.np.cosign.ui.home.HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = root.findViewById(R.id.CategoryRecyclerView);
-
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
         return root;
     }
 }

@@ -4,13 +4,15 @@ import subprocess
 import json
 import time
 import numpy as np
+import tensorflow as tf
+from tensorflow.keras.models import load_model
 
 OPENPOSE_WD = r'C:\Users\yanhw\Desktop\openpose-1.5.1-binaries-win64-gpu-python-flir-3d_recommended\openpose'
 OPENPOSE_EXE = r'C:\Users\yanhw\Desktop\openpose-1.5.1-binaries-win64-gpu-python-flir-3d_recommended\openpose\bin\OpenPoseDemo.exe'
 IO_FOLDER = os.path.abspath('inout')
 
-with open('rfc', 'rb') as file:
-    model = pickle.load(file)
+#graph = tf.get_default_graph()
+model = load_model('model.h5', custom_objects={"GlorotUniform": tf.keras.initializers.glorot_uniform})
 
 with open('gloss_map', 'rb') as file:
     gloss_map = pickle.load(file)
@@ -48,17 +50,23 @@ while True:
     people = data['people']
     if not people: continue
     frame = people[0]
-    #left_keypoint = np.array(frame['hand_left_keypoints_2d'])
+    left_keypoint = np.array(frame['hand_left_keypoints_2d'])
     right_keypoint = np.array(frame['hand_right_keypoints_2d'])
-    #rel_transform_inplace(left_keypoint)
+    rel_transform_inplace(left_keypoint)
     rel_transform_inplace(right_keypoint)
-    #X = [np.concatenate((left_keypoint, right_keypoint))]
-    X = [right_keypoint]
+    X = np.concatenate((left_keypoint, right_keypoint)).reshape(1, -1)
+
+    print('!!!!!!!!!!!!!!!', X.shape)
+    #with graph.as_default():
     y = model.predict(X)
     y1 = y[0]
-    gloss = gloss_map[y1]
+
+    max_index = np.argmax(y1)
+    max_acc = y1[max_index]
+    gloss = gloss_map[max_index]
 
     print(gloss)
+    print(max_acc)
 
     # Prepare for next
     os.remove(io_json)

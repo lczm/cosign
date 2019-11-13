@@ -1,5 +1,6 @@
 import pickle
 import pandas as pd
+from setup import DOWNSCALED_GLOSS
 
 df = pd.read_csv('user.csv')
 with open('keypoints', 'rb') as file:
@@ -8,6 +9,7 @@ with open('keypoints', 'rb') as file:
 store = {}
 keys = set()
 for gloss in df.gloss.unique():
+    if gloss not in DOWNSCALED_GLOSS: continue
     gloss_store = {}
     store[gloss] = gloss_store
 
@@ -30,5 +32,5 @@ for gloss in df.gloss.unique():
 
 print('Keys Equal:', keys == data.keys())
 
-with open('keypoints2', 'wb') as file:
+with open('keypoints2.1', 'wb') as file:
     pickle.dump(store, file)

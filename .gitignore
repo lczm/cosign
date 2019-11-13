@@ -213,3 +213,4 @@ lint/tmp/
 
 # Editor
 .vscode/
+inout/

@@ -1,9 +1,13 @@
 package sg.edu.np.cosign.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +27,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView.LayoutManager layoutManager;
 
-    private int[] images = {R.drawable.alphabet_finaledit, R.drawable.number_finaledit};
+    private int[] images = { R.drawable.alphabet_finaledit, R.drawable.number_finaledit };
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -31,8 +35,13 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(this).get(sg.edu.np.cosign.ui.home.HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = root.findViewById(R.id.CategoryRecyclerView);
+        layoutManager = new GridLayoutManager(getActivity(),2);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
+        Log.d("fukass", images.toString());
+        //CategoryAdapter adapter = new CategoryAdapter(images);
+        //  recyclerView.setAdapter(adapter);
+
         return root;
     }
 }

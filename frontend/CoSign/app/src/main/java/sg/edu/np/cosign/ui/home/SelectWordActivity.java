@@ -1,6 +1,7 @@
-package sg.edu.np.cosign;
+package sg.edu.np.cosign.ui.home;
 
 import androidx.appcompat.app.AppCompatActivity;
+import sg.edu.np.cosign.R;
 
 import android.os.Bundle;
 

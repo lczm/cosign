@@ -26,8 +26,9 @@
         android:id="@+id/signInText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="sendToMain"
         android:text="Sign In"
-        android:textColor="#E9ECEA"
+        android:textColor="#EE6C4D"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.701"
@@ -111,10 +112,9 @@
         android:layout_marginBottom="30dp"
         android:text="Get signing with CoSign!"
         android:textColor="#E9ECEA"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/getUsernameText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/projNameText2" />
 

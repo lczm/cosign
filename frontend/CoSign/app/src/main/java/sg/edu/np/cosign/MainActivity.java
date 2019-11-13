@@ -23,4 +23,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(deliverToCamera);
     }
 
+    public void sendToRegister(View view) {
+        Intent goToRegister = new Intent(this, RegisterActivity.class);
+        startActivity(goToRegister);
+
+    }
+
 }

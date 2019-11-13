@@ -1,5 +1,6 @@
 package sg.edu.np.cosign;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,10 +12,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import sg.edu.np.cosign.ui.home.HomeFragment;
+
 public class MainActivity extends AppCompatActivity{
 // implements View.OnTouchListener
     private static final String TAG = "MainActivity.java";
     private TextView tv_NewUser;
+    //Context context = this;
+    //private Session session;
 
     MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
@@ -25,7 +30,15 @@ public class MainActivity extends AppCompatActivity{
 
         tv_NewUser = findViewById(R.id.registerText);
         //tv_NewUser.setOnTouchListener(this);
+        if((dbHandler.findUser("CoSign") == null) || (dbHandler.findUser("cosign@gmail.com") == null)){
+            Log.d(TAG, "onCreate: test account created");
+            dbHandler.createTestAccount();
+        }
+
+        //session = new Session(context);
     }
+
+
 /*
     //For new users onTouch listener to launch a new intent page of registration
     public boolean onTouch(View v, MotionEvent event)
@@ -35,13 +48,15 @@ public class MainActivity extends AppCompatActivity{
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         return true;
-    }*/
+    }
+*/
 
     //For Login action nad checking of username and password
     public void onClick(View v)
     {
         final EditText etPassword = findViewById(R.id.passwordText);
         final EditText etUsername = findViewById(R.id.usernameText);
+        //final EditText etEmail = findViewById(R.id.usernameText);
 
         Log.v(TAG, "Login with: " + etUsername.getText().toString() + ", " + etPassword.getText().toString());
         //if(isValidUsername(etUsername.getText().toString()) && isValidPassword(etPassword.getText().toString()))
@@ -57,16 +72,25 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    // A function to check with the database if what they user enter exist, returns true/false, passed in onClick
     public boolean isValidUser(String username, String password)
     {
         UserData dbData = dbHandler.findUser(username);
-        Log.v(TAG, "Running Checks ... ..." + dbData.getMyUsername() + ": " + dbData.getMyPassword()
-                + "VS " + username + ": " + password);
-        if((dbData.getMyUsername().equals(username)) && dbData.getMyPassword().equals(password))
-        {
-            return true;
+        Boolean valid = false;
+        // added the or statement so that they can log in through both email and username
+        try {
+            if ((dbData.getMyUsername().equals(username) || (dbData.getMyEmail().equals(username)))) {
+                if (dbData.getMyPassword().equals(password)){
+                    valid = true;
+                }
+            }
         }
-        return false;
+        catch (NullPointerException e) {
+            e.printStackTrace();
+            valid = false;
+        }
+        //Log.d
+        return valid;
     }
 
 
@@ -76,5 +100,6 @@ public class MainActivity extends AppCompatActivity{
         startActivity(goToRegister);
 
     }
+
 
 }

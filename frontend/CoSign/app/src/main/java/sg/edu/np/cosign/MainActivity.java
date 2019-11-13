@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener{
-
+public class MainActivity extends AppCompatActivity{
+// implements View.OnTouchListener
     private static final String TAG = "MainActivity.java";
     private TextView tv_NewUser;
 
@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_main);
 
         tv_NewUser = findViewById(R.id.registerText);
-        tv_NewUser.setOnTouchListener(this);
+        //tv_NewUser.setOnTouchListener(this);
     }
-
+/*
     //For new users onTouch listener to launch a new intent page of registration
     public boolean onTouch(View v, MotionEvent event)
     {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         return true;
-    }
+    }*/
 
     //For Login action nad checking of username and password
     public void onClick(View v)

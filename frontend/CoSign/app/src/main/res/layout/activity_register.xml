@@ -44,9 +44,12 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="10dp"
+        android:backgroundTint="#E9ECEA"
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName"
+        android:textColor="#E9ECEA"
+        android:textColorHint="#E9ECEA"
         app:layout_constraintBottom_toTopOf="@+id/getEmailText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -71,31 +74,18 @@
         app:layout_constraintVertical_bias="0.09" />
 
     <EditText
-        android:id="@+id/getRePasswordText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="98dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="10dp"
-        android:ems="10"
-        android:hint="Re-enter Password"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/registerButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/getPasswordText" />
-
-    <EditText
         android:id="@+id/getEmailText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="98dp"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="10dp"
+        android:backgroundTint="#E9ECEA"
         android:ems="10"
         android:hint="Email Address"
         android:inputType="textPersonName"
+        android:textColor="#E9ECEA"
+        android:textColorHint="#E9ECEA"
         app:layout_constraintBottom_toTopOf="@+id/getPasswordText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -123,14 +113,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="98dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="100dp"
-        android:layout_marginBottom="10dp"
+        android:backgroundTint="#E9ECEA"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/getRePasswordText"
+        android:textColor="#E9ECEA"
+        android:textColorHint="#E9ECEA"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/getEmailText" />
 
@@ -139,14 +131,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="156dp"
-        android:layout_marginTop="1dp"
         android:layout_marginEnd="167dp"
         android:layout_marginBottom="59dp"
         android:text="Register"
         app:layout_constraintBottom_toTopOf="@+id/haveAccountText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/reEnterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#E9ECEA"
+        android:ems="10"
+        android:hint="Re-enter password"
+        android:inputType="textPassword"
+        android:textColor="#E9ECEA"
+        android:textColorHint="#E9ECEA"
+        app:layout_constraintBottom_toTopOf="@+id/registerButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/getRePasswordText" />
+        app:layout_constraintTop_toBottomOf="@+id/getPasswordText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

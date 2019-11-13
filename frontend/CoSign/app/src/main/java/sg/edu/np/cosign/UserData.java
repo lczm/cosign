@@ -3,16 +3,18 @@ package sg.edu.np.cosign;
 public class UserData {
     private String MyUsername;
     private String MyPassword;
+    private String MyEmail;
 
     public UserData()
     {
 
     }
 
-    public UserData(String myUsername, String myPassword)
+    public UserData(String myUsername, String myPassword, String myEmail)
     {
         MyUsername = myUsername;
         MyPassword = myPassword;
+        MyEmail = myEmail;
     }
 
     public String getMyUsername() {
@@ -30,4 +32,8 @@ public class UserData {
     public void setMyPassword(String myPassword) {
         MyPassword = myPassword;
     }
+
+    public String getMyEmail() { return MyEmail; }
+
+    public void setMyEmail(String myEmail) { MyEmail = myEmail; }
 }

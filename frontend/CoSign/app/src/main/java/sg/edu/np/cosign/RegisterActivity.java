@@ -1,11 +1,11 @@
 package sg.edu.np.cosign;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
 
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 

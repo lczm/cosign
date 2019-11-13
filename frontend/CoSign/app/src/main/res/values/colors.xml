@@ -5,4 +5,5 @@
     <color name="white">#E9ECEA</color>
     <color name="black">#2B3B3A</color>
     <color name="orange">#EE6C4D</color>
+    <color name="control_background">#cc4285f4</color>
 </resources>

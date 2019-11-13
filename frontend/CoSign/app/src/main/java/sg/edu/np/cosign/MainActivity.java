@@ -1,7 +1,5 @@
 package sg.edu.np.cosign;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity{
 // implements View.OnTouchListener
@@ -71,10 +69,7 @@ public class MainActivity extends AppCompatActivity{
         return false;
     }
 
-    public void sendToCamera(View view) {
-        Intent deliverToCamera = new Intent(this, CameraActivity.class);
-        startActivity(deliverToCamera);
-    }
+
 
     public void sendToRegister(View view) {
         Intent goToRegister = new Intent(this, RegisterActivity.class);

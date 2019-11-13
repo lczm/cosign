@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //tv_NewUser = findViewById(R.id.registerText);
+        tv_NewUser = findViewById(R.id.registerText);
         tv_NewUser.setOnTouchListener(this);
     }
 

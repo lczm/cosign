@@ -32,11 +32,6 @@ public class BottomNavigation extends AppCompatActivity
         NavigationUI.setupWithNavController(navView, navController);
     }
 
-    public void sendToCamera(View view) {
-        Intent deliverToCamera = new Intent(this, Camera2Activity.class);
-        startActivity(deliverToCamera);
-    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         return false;

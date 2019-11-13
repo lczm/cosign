@@ -22,25 +22,28 @@ import sg.edu.np.cosign.R;
 public class HomeFragment extends Fragment {
 
     private sg.edu.np.cosign.ui.home.HomeViewModel homeViewModel;
-
+/*
     private RecyclerView recyclerView;
 
     private RecyclerView.LayoutManager layoutManager;
 
     private int[] images = { R.drawable.alphabet_finaledit, R.drawable.number_finaledit };
 
+ */
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(sg.edu.np.cosign.ui.home.HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        recyclerView = root.findViewById(R.id.CategoryRecyclerView);
+        /*recyclerView = root.findViewById(R.id.CategoryRecyclerView);
         layoutManager = new GridLayoutManager(getActivity(),2);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         Log.d("fukass", images.toString());
         //CategoryAdapter adapter = new CategoryAdapter(images);
         //  recyclerView.setAdapter(adapter);
+         */
 
         return root;
     }

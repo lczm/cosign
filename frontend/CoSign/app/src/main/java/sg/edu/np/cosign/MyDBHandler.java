@@ -39,6 +39,17 @@ public class MyDBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void createTestAccount(){
+        ContentValues values= new ContentValues();
+        values.put(COLUMN_USERNAME, "CoSign");
+        values.put(COLUMN_EMAIL, "cosign@gmail.com");
+        values.put(COLUMN_PASSWORD,"password123");
+        SQLiteDatabase database= this.getWritableDatabase();
+        Log.v(TAG,values.toString());
+        database.insert(ACCOUNTS,null,values);
+        database.close();
+    }
+
     public void addUser(UserData userData)
     {
         ContentValues values = new ContentValues();
@@ -53,7 +64,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public UserData findUser(String username)
     {
-        String query = "SELECT * FROM " + ACCOUNTS + " WHERE " + COLUMN_USERNAME + "=\"" + username + "\"";
+        String query = "SELECT * " +
+                "FROM " + ACCOUNTS +
+                " WHERE " + COLUMN_USERNAME + "=\"" + username + "\"" +
+                " OR " + COLUMN_EMAIL + "=\"" + username + "\"" ;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query,null);
 
@@ -62,8 +76,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if(cursor.moveToFirst())
         {
             queryData.setMyUsername(cursor.getString(0));
-            queryData.setMyPassword(cursor.getString(1));
-            queryData.setMyEmail(cursor.getString(2));
+            queryData.setMyPassword(cursor.getString(2));
+            queryData.setMyEmail(cursor.getString(1));
 
         }
         else

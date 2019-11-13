@@ -10,11 +10,11 @@ public class UserData {
 
     }
 
-    public UserData(String myUsername, String myPassword, String myEmail)
+    public UserData(String myUsername, String myEmail, String myPassword)
     {
-        MyUsername = myUsername;
-        MyPassword = myPassword;
-        MyEmail = myEmail;
+        this.MyUsername = myUsername;
+        this.MyPassword = myPassword;
+        this.MyEmail = myEmail;
     }
 
     public String getMyUsername() {

@@ -16,15 +16,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/CategoryRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CategoryTitle" />
-
     <TextView
         android:id="@+id/CategoryTitle"
         android:layout_width="wrap_content"
@@ -33,9 +24,34 @@
         android:textAlignment="center"
         android:textSize="36sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/CategoryRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView2" />
+
+
+    <ImageButton
+        android:id="@+id/numBttn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alphaBttn"
+        app:srcCompat="@drawable/number" />
+
+    <ImageButton
+        android:id="@+id/alphaBttn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:onClick="sendToWord"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/numBttn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
+        app:layout_constraintVertical_bias="0.063"
+        app:srcCompat="@drawable/alphabets" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,4 +4,5 @@
     <color name="darkBlue">#0A1B74</color>
     <color name="white">#E9ECEA</color>
     <color name="black">#2B3B3A</color>
+    <color name="control_background">#cc4285f4</color>
 </resources>

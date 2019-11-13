@@ -11,6 +11,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import sg.edu.np.cosign.ui.home.SelectNumActivity;
 import sg.edu.np.cosign.ui.home.SelectWordActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,9 +34,14 @@ public class BottomNavigation extends AppCompatActivity
         NavigationUI.setupWithNavController(navView, navController);
     }
 
-    public void sendToWord(View view) {
+    public void sendToAlphaSel(View view) {
         Intent goToWord = new Intent(this, SelectWordActivity.class);
         startActivity(goToWord);
+    }
+
+    public void sendToNumSel(View view) {
+        Intent goToNum = new Intent(this, SelectNumActivity.class);
+        startActivity(goToNum);
     }
 
     @Override

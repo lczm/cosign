@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.home.LearnSign"></activity>
+        <activity android:name=".ui.home.SelectNumActivity"></activity>
+        <activity android:name=".ui.home.LearnSign" />
         <activity android:name=".ui.home.SelectWordActivity" />
         <activity android:name=".Camera2Activity" />
         <activity

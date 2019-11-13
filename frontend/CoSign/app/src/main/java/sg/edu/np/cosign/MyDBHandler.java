@@ -15,6 +15,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "accountDB.db";
     public static final String ACCOUNTS = "Accounts";
     public static final String COLUMN_USERNAME = "Username";
+    public static final String COLUMN_EMAIL = "Email";
     public static  final String COLUMN_PASSWORD = "Password";
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version)
@@ -25,7 +26,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        String CREATE_ACCOUNTS_TABLE = "CREATE TABLE " + ACCOUNTS + "(" + COLUMN_USERNAME + " TEXT," + COLUMN_PASSWORD
+        String CREATE_ACCOUNTS_TABLE = "CREATE TABLE " + ACCOUNTS + "(" + COLUMN_USERNAME + " TEXT," + COLUMN_EMAIL + " TEXT," + COLUMN_PASSWORD
                 + " TEXT" + ")";
         db.execSQL(CREATE_ACCOUNTS_TABLE);
     }
@@ -42,6 +43,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     {
         ContentValues values = new ContentValues();
         values.put(COLUMN_USERNAME, userData.getMyUsername());
+        values.put(COLUMN_EMAIL, userData.getMyEmail());
         values.put(COLUMN_PASSWORD, userData.getMyPassword());
         SQLiteDatabase db = this.getWritableDatabase();
         Log.v(TAG, values.toString());
@@ -61,6 +63,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         {
             queryData.setMyUsername(cursor.getString(0));
             queryData.setMyPassword(cursor.getString(1));
+            queryData.setMyEmail(cursor.getString(2));
+
         }
         else
         {

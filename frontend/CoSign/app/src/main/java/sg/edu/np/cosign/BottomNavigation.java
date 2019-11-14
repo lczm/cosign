@@ -44,6 +44,7 @@ public class BottomNavigation extends AppCompatActivity
         startActivity(goToNum);
     }
 
+    //To exit app when back button is pressed after login
     public void onBackPressed(){
         Intent a = new Intent(Intent.ACTION_MAIN);
         a.addCategory(Intent.CATEGORY_HOME);

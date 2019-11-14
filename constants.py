@@ -1,5 +1,8 @@
 from os.path import abspath
 
+IMAGE_WIDTH = 1280
+IMAGE_HEIGHT = 720
+
 IMAGE_FOLDER = abspath('images')
 KEYPOINT_FOLDER = abspath('keypoints')
 

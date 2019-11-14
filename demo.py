@@ -1,4 +1,4 @@
-from constants import OPENPOSE_EXE, OPENPOSE_WD, IO_FOLDER
+from constants import OPENPOSE_EXE, OPENPOSE_WD, IO_FOLDER, IMAGE_WIDTH, IMAGE_HEIGHT
 from process_keypoints import rel_transform_inplace, process_hand_keypoints
 import pickle
 import json
@@ -36,7 +36,7 @@ while True:
     people = data['people']
     if not people: continue
     keypoints = people[0]
-    _, right_keypoints = process_hand_keypoints(keypoints)
+    _, right_keypoints = process_hand_keypoints(keypoints, IMAGE_WIDTH, IMAGE_HEIGHT)
     y = model.predict([right_keypoints])
     gloss = gloss_map[y[0]]
     print(gloss)

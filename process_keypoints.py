@@ -1,18 +1,24 @@
-from constants import KEYPOINT_FOLDER
+from constants import KEYPOINT_FOLDER, IMAGE_WIDTH, IMAGE_HEIGHT
 import numpy as np
 import os
 import json
 import pickle
 
+def rel_scale_inplace(hand_keypoint, width, height):
+    hand_keypoint[0::3] /= width
+    hand_keypoint[1::3] /= height
+
 def rel_transform_inplace(hand_keypoint):
     hand_keypoint[0::3] -= hand_keypoint[0]
     hand_keypoint[1::3] -= hand_keypoint[1]
 
-def process_hand_keypoints(keypoints):
-    left_keypoints = np.array(keypoints['hand_left_keypoints_2d'])
-    right_keypoints = np.array(keypoints['hand_right_keypoints_2d'])
+def process_hand_keypoints(keypoints, width, height):
+    left_keypoints = np.array(keypoints['hand_left_keypoints_2d'], dtype=float)
+    right_keypoints = np.array(keypoints['hand_right_keypoints_2d'], dtype=float)
     rel_transform_inplace(left_keypoints)
     rel_transform_inplace(right_keypoints)
+    rel_scale_inplace(left_keypoints, width, height)
+    rel_scale_inplace(right_keypoints, width, height)
     return left_keypoints, right_keypoints
 
 if __name__ == "__main__":
@@ -38,7 +44,7 @@ if __name__ == "__main__":
             with open(filepath) as file: data = json.load(file)
             
             keypoints = data['people'][0]
-            left_keypoints, right_keypoints = process_hand_keypoints(keypoints)
+            left_keypoints, right_keypoints = process_hand_keypoints(keypoints, IMAGE_WIDTH, IMAGE_HEIGHT)
             _X_left.append(left_keypoints)
             _X_right.append(right_keypoints)
             _X.append(np.concatenate((left_keypoints, right_keypoints)))

@@ -1,4 +1,3 @@
-from process_keypoints import rel_transform_inplace, process_hand_keypoints
 import pickle
 import json
 import subprocess
@@ -27,23 +26,7 @@ while True:
     # TODO: Communicate with Server
     r = requests.get('', json={'image': open('temp.jpg', 'rb')})
     data = r.json()
-    left_keypoints = data['left']
-    right_keypoints = data['right']
-    # These preprocessing methods are to be implemented by the server
-    # def rel_transform_inplace(hand_keypoint):
-    #     hand_keypoint[0::3] -= hand_keypoint[0]
-    #     hand_keypoint[1::3] -= hand_keypoint[1]
-
-    # def process_hand_keypoints(keypoints):
-    #     left_keypoints = np.array(keypoints['hand_left_keypoints_2d'])
-    #     right_keypoints = np.array(keypoints['hand_right_keypoints_2d'])
-    #     rel_transform_inplace(left_keypoints)
-    #     rel_transform_inplace(right_keypoints)
-    #     return left_keypoints, right_keypoints
-
-    # Predict
-    y = model.predict([right_keypoints])
-    gloss = gloss_map[y[0]]
+    gloss = data['answer']
     print(gloss)
     height, width, _ = image.shape
     image = cv2.putText(image, gloss, (0, height), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)

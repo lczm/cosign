@@ -4,6 +4,7 @@ import os
 
 TEMP_FOLDER = os.path.abspath('temp')
 if not os.path.isdir(TEMP_FOLDER): os.mkdir(TEMP_FOLDER)
+if not os.path.isdir(KEYPOINT_FOLDER): os.mkdir(KEYPOINT_FOLDER)
 
 pic_names = set([os.path.splitext(filename)[0] for filename in os.listdir(IMAGE_FOLDER)])
 json_names = set([os.path.splitext(filename)[0][:-10] for filename in os.listdir(KEYPOINT_FOLDER)])

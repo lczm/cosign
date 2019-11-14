@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity{
         if(isValidUser(etUsername.getText().toString(),etPassword.getText().toString()))
         {
             Intent intent = new Intent(MainActivity.this, BottomNavigation.class);
-            Toast.makeText(MainActivity.this, "Valid User", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Welcome, " + etUsername.getText().toString(), Toast.LENGTH_LONG).show();
             startActivity(intent);
         }
         else

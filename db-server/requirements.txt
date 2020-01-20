@@ -1,0 +1,5 @@
+requests
+Flask
+Flask-Bcrypt
+Flask-SQLAlchemy
+WTForms-JSON

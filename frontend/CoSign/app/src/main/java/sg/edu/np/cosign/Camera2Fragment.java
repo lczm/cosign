@@ -6,8 +6,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -44,10 +47,17 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,6 +66,14 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import javax.xml.transform.Result;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import sg.edu.np.cosign.Classes.AutoFitTextureView;
 
 public class Camera2Fragment extends Fragment
@@ -108,12 +126,12 @@ public class Camera2Fragment extends Fragment
     /**
      * Max preview width that is guaranteed by Camera2 API
      */
-    private static final int MAX_PREVIEW_WIDTH = 1920;
+    private static final int MAX_PREVIEW_WIDTH = 480;
 
     /**
      * Max preview height that is guaranteed by Camera2 API
      */
-    private static final int MAX_PREVIEW_HEIGHT = 1080;
+    private static final int MAX_PREVIEW_HEIGHT = 480;
 
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
@@ -124,7 +142,7 @@ public class Camera2Fragment extends Fragment
 
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
-            openCamera(width, height);
+            openCamera(480, 480);
         }
 
         @Override
@@ -221,6 +239,7 @@ public class Camera2Fragment extends Fragment
      */
     private File mFile;
 
+    private String answer;
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
@@ -230,10 +249,21 @@ public class Camera2Fragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+            mBackgroundHandler.post(new ImageSaver(reader.acquireLatestImage(), mFile));
+            Intent i = new Intent(getActivity(), ResultActivity.class);
+           // try {
+           //     answerJSON.get("answer").toString();
+           // } catch (JSONException e) {
+           //     e.printStackTrace();
+           // }
+          //  i.putExtra("answer", answer);
+            i.putExtra("capturedImg", mFile);
+            startActivity(i);
         }
 
     };
+
+
 
     /**
      * {@link CaptureRequest.Builder} for the camera preview
@@ -266,6 +296,8 @@ public class Camera2Fragment extends Fragment
      * Orientation of the camera sensor
      */
     private int mSensorOrientation;
+
+    private static JSONObject answerJSON;
 
     /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
@@ -352,6 +384,33 @@ public class Camera2Fragment extends Fragment
         }
     }
 
+    private static JSONObject uploadImage(byte[] file) {
+        try {
+
+            final MediaType MEDIA_TYPE_PNG = MediaType.parse("text/plain; charset=utf-8");
+
+            RequestBody req = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("file","pic.png", RequestBody.create(MEDIA_TYPE_PNG, file)).build();
+
+            Request request = new Request.Builder()
+                    .url("http://35.234.57.251/image")
+                    .post(req)
+                    .build();
+
+            OkHttpClient client = new OkHttpClient();
+            Response response = client.newCall(request).execute();
+            Log.d("response", "uploadImage:"+response.body().string());
+
+            return new JSONObject(response.body().string());
+
+        } catch (UnknownHostException | UnsupportedEncodingException e) {
+            Log.e(TAG, "Error: " + e.getLocalizedMessage());
+        } catch (Exception e) {
+            Log.e(TAG, "Other Error: " + e.getLocalizedMessage());
+        }
+        return null;
+    }
+
     /**
      * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that
      * is at least as large as the respective texture view size, and that is at most as large as the
@@ -394,7 +453,7 @@ public class Camera2Fragment extends Fragment
         if (bigEnough.size() > 0) {
             return Collections.min(bigEnough, new CompareSizesByArea());
         } else if (notBigEnough.size() > 0) {
-            return Collections.max(notBigEnough, new CompareSizesByArea());
+            return Collections.min(notBigEnough, new CompareSizesByArea());
         } else {
             Log.e(TAG, "Couldn't find any suitable preview size");
             return choices[0];
@@ -420,7 +479,7 @@ public class Camera2Fragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+        mFile = new File(getActivity().getExternalFilesDir(null), "pic.png");
     }
 
     @Override
@@ -433,7 +492,8 @@ public class Camera2Fragment extends Fragment
         // a camera and start preview from here (otherwise, we wait until the surface is ready in
         // the SurfaceTextureListener).
         if (mTextureView.isAvailable()) {
-            openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            //openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            openCamera(480, 480);
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
@@ -498,7 +558,9 @@ public class Camera2Fragment extends Fragment
                 Size largest = Collections.max(
                         Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
                         new CompareSizesByArea());
-                mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
+               // mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
+               //         ImageFormat.JPEG, /*maxImages*/2);
+                mImageReader = ImageReader.newInstance(720, 1280,
                         ImageFormat.JPEG, /*maxImages*/2);
                 mImageReader.setOnImageAvailableListener(
                         mOnImageAvailableListener, mBackgroundHandler);
@@ -915,6 +977,8 @@ public class Camera2Fragment extends Fragment
             try {
                 output = new FileOutputStream(mFile);
                 output.write(bytes);
+                uploadImage(bytes);
+
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -927,6 +991,10 @@ public class Camera2Fragment extends Fragment
                     }
                 }
             }
+
+
+
+
         }
 
     }

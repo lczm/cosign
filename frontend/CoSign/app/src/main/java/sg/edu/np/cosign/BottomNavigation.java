@@ -32,6 +32,7 @@ public class BottomNavigation extends AppCompatActivity
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+        
     }
 
     public void sendToAlphaSel(View view) {
@@ -42,6 +43,14 @@ public class BottomNavigation extends AppCompatActivity
     public void sendToNumSel(View view) {
         Intent goToNum = new Intent(this, SelectNumActivity.class);
         startActivity(goToNum);
+    }
+
+    //To exit app when back button is pressed after login
+    public void onBackPressed(){
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 
     @Override

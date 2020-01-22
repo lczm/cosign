@@ -16,4 +16,4 @@ COPY pickleModels ./build/examples/tutorial_api_python
 COPY utility.py ./build/examples/tutorial_api_python
 
 WORKDIR ./build/examples/tutorial_api_python
-CMD ["python3", "utility.py"]
+CMD ["python3", "-u", "utility.py"]

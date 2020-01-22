@@ -10,6 +10,7 @@ class User(db.Model):
 
     learns      = db.relationship('Learn',  backref='user')
     bookmarks   = db.relationship('Bookmark', backref='user')
+    goals       = db.relationship('Goal', backref='user')
 
 class Sign(db.Model):
     sign_id     = db.Column(db.Integer,     primary_key=True)
@@ -30,3 +31,8 @@ class Learn(db.Model):
 class Bookmark(db.Model):
     user_id     = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
     sign_id     = db.Column(db.Integer, db.ForeignKey('sign.sign_id'), primary_key=True)
+
+class Goal(db.Model):
+    goal_id     = db.Column(db.Integer,     primary_key=True)
+    user_id     = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    date        = db.Column(db.Date,    nullable=False)

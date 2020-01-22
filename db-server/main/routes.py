@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from main import app, db, bcrypt
-from main.models import User, Sign, Category, Learn, Bookmark
-from main.forms import RegisterForm, LoginForm, AuthForm, LearnForm, BookmarkForm
+from main.models import User, Sign, Category, Learn, Bookmark, Goal
+from main.forms import RegisterForm, LoginForm, AuthForm, LearnForm, BookmarkForm, GoalForm
 from functools import wraps
 
 def validate_form(form_type):
@@ -62,6 +62,22 @@ def learn(form, user):
     db.session.commit()
     return '', 200
 
+@app.route('/goal', methods=['POST'])
+@login_required
+@validate_form(GoalForm)
+def goal(form, user):
+    goal_id = form.goal_id.data
+    if goal_id == -1:
+        goal = Goal(date=form.date.data)
+        db.session.add(goal)
+    else:
+        goal = Goal.query.get(goal_id)
+        if not goal:
+            jsonify({'error': 'Goal does not exist'}), 400
+        goal.date = form.date.data
+    db.session.commit()
+    return '', 200
+
 @app.route('/bookmark', methods=['POST'])
 @login_required
 @validate_form(BookmarkForm)
@@ -100,4 +116,5 @@ def handsigns():
 def profile(user):
     learns = {sign.sign_id: {'date': sign.date} for sign in user.learns}
     bookmarks = {bookmark.sign_id: {} for bookmark in user.bookmarks}
-    return jsonify({'learns': learns, 'bookmarks': bookmarks})
+    goals = {goal.goal_id: {'date': goal.date} for goal in user.goals}
+    return jsonify({'learns': learns, 'bookmarks': bookmarks, 'goals': goals})

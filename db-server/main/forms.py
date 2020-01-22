@@ -1,5 +1,5 @@
 from wtforms import Form
-from wtforms.fields import StringField, IntegerField
+from wtforms.fields import StringField, IntegerField, DateField
 from wtforms.validators import ValidationError, InputRequired, Length, Email
 from main.models import User
 
@@ -26,3 +26,6 @@ class LearnForm(Form):
 class BookmarkForm(Form):
     sign_id     = IntegerField('sign_id',   validators=[InputRequired()])
     
+class GoalForm(Form):
+    goal_id     = IntegerField('goal_id',   validators=[InputRequired()])
+    date        = DateField('date',         validators=[InputRequired()])

@@ -219,3 +219,5 @@ dataset-img/
 dataset-json/
 dataset-vid/
 dataset-img.7z
+
+base-build/

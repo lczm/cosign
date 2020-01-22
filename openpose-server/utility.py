@@ -117,6 +117,7 @@ def hello():
 
 @app.route('/image', methods=['GET', 'POST'])
 def image():
+    print("--- Predicting ---")
     start = time.time()
     
     image = request.files["file"]
@@ -124,11 +125,10 @@ def image():
     # TODO : Only for mobile
 
     # pil_image = pil_image.transpose(Image.FLIP_LEFT_RIGHT)
-    # pil_image = pil_image.transpose(Image.ROTATE_270)
+    pil_image = pil_image.transpose(Image.ROTATE_90)
     # pil_image = pil_image.resize((480, 480), Image.ANTIALIAS)
-    pil_image.save('hello2.png')
 
-    print("Start to predict")
+    pil_image.save("mobileImage.png")
 
     width = pil_image.width
     height = pil_image.height
@@ -142,6 +142,8 @@ def image():
     if len(hand_boxes) < 1:
         print('Bad image', len(hand_boxes))
         return jsonify({'error': 'Bad image'})
+    
+    print("--- Number of hands ", len(hand_boxes))
 
     # Get the parameters for the bounding box
     # square_length = min(pil_image.width, pil_image.height)
@@ -215,7 +217,7 @@ def image():
 
     # Convert pillow image to opencv
     opencvImage = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
-    print("Time taken", str(time.time() - start))
+    print("--- Time taken; Preprocess Image", str(time.time() - start))
 
     datum = op.Datum()
     datum.cvInputData = opencvImage
@@ -243,13 +245,14 @@ def image():
     y = model.predict([right])
     gloss = gloss_map[y[0]]
 
-    print("Time taken", str(time.time() - start), "Answer : ", gloss)
+    print("--- Time taken; Final", str(time.time() - start), "Answer : ", gloss)
     return jsonify({'answer': gloss, 'left' : x_left.tolist(), 'right': x_right.tolist()})
 
     # Debugging purposes
     return jsonify({'left':datum.handKeypoints[0].tolist(), 'right':datum.handKeypoints[1].tolist()})
 
 if __name__ == '__main__':
+    print("Starting the Flask Server")
     app.run(host='0.0.0.0', port=80)
     # app.run(host='0.0.0.0', port=5000)
     # app.run(host='0.0.0.0', port=5000, debug=True)

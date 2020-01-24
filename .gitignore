@@ -214,5 +214,7 @@ lint/tmp/
 # Editor
 .vscode/
 images/
+images*/
 keypoints/
+keypoints*/
 inout/

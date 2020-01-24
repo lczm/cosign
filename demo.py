@@ -1,4 +1,4 @@
-from constants import OPENPOSE_EXE, OPENPOSE_WD, IO_FOLDER, IMAGE_WIDTH, IMAGE_HEIGHT
+from constants import OPENPOSE_EXE, OPENPOSE_WD, IO_FOLDER, IMAGE_WIDTH, IMAGE_HEIGHT, CLASSIFIERS_FOLDER
 from process_keypoints import rel_transform_inplace, process_hand_keypoints
 import pickle
 import json
@@ -6,8 +6,9 @@ import subprocess
 import os
 import time
 
-with open('rfc', 'rb') as file:         model = pickle.load(file)
-with open('gloss_map', 'rb') as file:   gloss_map = pickle.load(file)
+#with open('rfc', 'rb') as file:         model = pickle.load(file)
+with open(os.path.join(CLASSIFIERS_FOLDER, 'bc-e-b'), 'rb') as file:    model = pickle.load(file)
+with open('gloss_map', 'rb') as file:                                   gloss_map = pickle.load(file)
 
 # Start OpenPose
 subprocess.Popen([
@@ -28,7 +29,7 @@ while True:
     while True:
         if os.path.isfile(io_json):
             break
-    time.sleep(0.1)
+    time.sleep(0.15)
 
     # Predict
     with open(io_json) as file:

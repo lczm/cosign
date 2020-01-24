@@ -17,8 +17,8 @@ def process_hand_keypoints(keypoints, width, height):
     right_keypoints = np.array(keypoints['hand_right_keypoints_2d'], dtype=float)
     rel_transform_inplace(left_keypoints)
     rel_transform_inplace(right_keypoints)
-    rel_scale_inplace(left_keypoints, width, height)
-    rel_scale_inplace(right_keypoints, width, height)
+    # rel_scale_inplace(left_keypoints, width, height)
+    # rel_scale_inplace(right_keypoints, width, height)
     return left_keypoints, right_keypoints
 
 if __name__ == "__main__":

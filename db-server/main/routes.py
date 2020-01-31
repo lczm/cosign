@@ -5,7 +5,6 @@ from main.forms import RegisterForm, LoginForm, AuthForm, LearnForm, BookmarkFor
 from functools import wraps
 
 def validate_form(form_type):
-    print("Validate_Form decorator")
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):

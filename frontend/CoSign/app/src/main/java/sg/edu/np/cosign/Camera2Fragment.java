@@ -393,7 +393,7 @@ public class Camera2Fragment extends Fragment
                     .addFormDataPart("file","pic.png", RequestBody.create(MEDIA_TYPE_PNG, file)).build();
 
             Request request = new Request.Builder()
-                    .url("http://35.229.247.145/image")
+                    .url("http://35.229.247.145:5001/image")
                     .post(req)
                     .build();
 

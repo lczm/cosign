@@ -10,3 +10,5 @@ services:
         build: ./db-server
         ports:
             - 5000:5000
+        volumes: 
+            - "./db/site.db:/usr/src/app/main/site.db"

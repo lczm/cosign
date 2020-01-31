@@ -393,13 +393,13 @@ public class Camera2Fragment extends Fragment
                     .addFormDataPart("file","pic.png", RequestBody.create(MEDIA_TYPE_PNG, file)).build();
 
             Request request = new Request.Builder()
-                    .url("http://35.234.57.251/image")
+                    .url("http://35.229.247.145/image")
                     .post(req)
                     .build();
 
             OkHttpClient client = new OkHttpClient();
             Response response = client.newCall(request).execute();
-            Log.d("response", "uploadImage:"+response.body().string());
+            Log.d("DEBUG", "uploadImage:"+response.body().string());
 
             return new JSONObject(response.body().string());
 

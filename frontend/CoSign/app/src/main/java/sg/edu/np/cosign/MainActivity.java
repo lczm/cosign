@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity{
     public boolean isValidUserPost(String username, String password)
     {
         try {
-
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("email", username);

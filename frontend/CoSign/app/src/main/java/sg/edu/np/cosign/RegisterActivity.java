@@ -10,11 +10,21 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -37,51 +47,73 @@ public class RegisterActivity extends AppCompatActivity {
         final EditText etEmail = findViewById(R.id.getEmailText);
         final EditText etRePassword = findViewById((R.id.reEnterText));
 
-        if(isFormFilled()) {
+        // Check if the form is fully filled
+        // if(isFormFilled()) {
+        //     //isValidUsername(etUsername.getText().toString()) &&
+        //     if(isValidPassword(etPassword.getText().toString()) && isValidEmail(etEmail.getText().toString()))
+        //     {
+        //         UserData dbData=dbHandler.findUser(etUsername.getText().toString());
+        //         if (dbData==null){
+        //             String dbUserName= etUsername.getText().toString();
+        //             String dbPassword= etPassword.getText().toString();
+        //             UserData dbUserData= new UserData();
+        //             dbUserData.setMyUsername(dbUserName);
+        //             dbHandler.addUser(dbUserData);
 
-        //isValidUsername(etUsername.getText().toString()) &&
-        if(isValidPassword(etPassword.getText().toString()) && isValidEmail(etEmail.getText().toString()))
-        {
-            UserData dbData=dbHandler.findUser(etUsername.getText().toString());
-            if (dbData==null){
-                String dbUserName= etUsername.getText().toString();
-                String dbPassword= etPassword.getText().toString();
-                UserData dbUserData= new UserData();
-                dbUserData.setMyUsername(dbUserName);
-                dbHandler.addUser(dbUserData);
+        //             Toast.makeText(RegisterActivity.this,"User Created Successfully", Toast.LENGTH_LONG).show();
+        //             Intent goToMain = new Intent(this, MainActivity.class);
+        //             startActivity(goToMain);
 
+        //         }
+        //         else{
+        //             Toast.makeText(RegisterActivity.this,"User already exist.\n Please try again.",Toast.LENGTH_LONG).show();
+        //         }
+        //         //Toast.makeText(Main2Activity.this,"Valid User Created",Toast.LENGTH_LONG).show();
+        //         //finish();
+
+        //     }
+        //     else
+        //     {
+        //         //Toast.makeText(Main2Activity.this,"Invalid User Created.\nPlease Try Again.",Toast.LENGTH_LONG).show();
+        //         new AlertDialog.Builder(context)
+        //                 .setTitle("Invalid Email/Password")
+        //                 .setMessage("Password should contain at least one capital letter, one number, 6-12 characters and one of these (!@#$%) characters. \n \n" +
+        //                         "Email should be valid")
+
+        //                 // Specifying a listener allows you to take an action before dismissing the dialog.
+        //                 // The dialog is automatically dismissed when a dialog button is clicked.
+        //                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        //                                                              public void onClick(DialogInterface dialog, int which) {
+        //                         // Continue with delete operation
+        //                 }
+        //                 })
+        //                 .show();
+        //     }
+        // }
+
+        if (isFormFilled()) {
+            if (!isValidPassword(etPassword.getText().toString())) {
+                showPasswordEmailError();
+            }
+            if (!isValidEmail(etEmail.getText().toString())) {
+                showPasswordEmailError();
+            }
+
+            boolean response = createUser(etUsername.getText().toString(),
+                        etEmail.getText().toString(),
+                        etPassword.getText().toString());
+
+            if (response == true) {
                 Toast.makeText(RegisterActivity.this,"User Created Successfully", Toast.LENGTH_LONG).show();
                 Intent goToMain = new Intent(this, MainActivity.class);
                 startActivity(goToMain);
-
-            }
-            else{
+            } else {
                 Toast.makeText(RegisterActivity.this,"User already exist.\n Please try again.",Toast.LENGTH_LONG).show();
             }
-            //Toast.makeText(Main2Activity.this,"Valid User Created",Toast.LENGTH_LONG).show();
-            //finish();
-
-        }
-        else
-        {
-            //Toast.makeText(Main2Activity.this,"Invalid User Created.\nPlease Try Again.",Toast.LENGTH_LONG).show();
-            new AlertDialog.Builder(context)
-                    .setTitle("Invalid Email/Password")
-                    .setMessage("Password should contain at least one capital letter, one number, 6-12 characters and one of these (!@#$%) characters. \n \n" +
-                            "Email should be valid")
-
-                    // Specifying a listener allows you to take an action before dismissing the dialog.
-                    // The dialog is automatically dismissed when a dialog button is clicked.
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Continue with delete operation
-                        }
-                    })
-                    .show();
-        }
         }
 
     }
+
     public boolean isValidPassword(String password)
     {
         Pattern passwordPattern;
@@ -208,6 +240,51 @@ public class RegisterActivity extends AppCompatActivity {
         Intent goToMain = new Intent(this, MainActivity.class);
         startActivity(goToMain);
 
+    }
+
+    public void showPasswordEmailError() {
+         new AlertDialog.Builder(context)
+                 .setTitle("Invalid Email/Password")
+                 .setMessage("Password should contain at least one capital letter, one number, 6-12 characters and one of these (!@#$%) characters. \n \n" +
+                         "Email should be valid")
+
+                 // Specifying a listener allows you to take an action before dismissing the dialog.
+                 // The dialog is automatically dismissed when a dialog button is clicked.
+                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                              public void onClick(DialogInterface dialog, int which) {
+                         // Continue with delete operation
+                 }
+                 }) .show();
+    }
+
+    public boolean createUser(String username, String email, String password) {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("username", username);
+                jsonObject.put("email", email);
+                jsonObject.put("password", password);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url("http://35.229.247.145:5000/register")
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            int responseCode = response.code();
+            if (responseCode == 200) {
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

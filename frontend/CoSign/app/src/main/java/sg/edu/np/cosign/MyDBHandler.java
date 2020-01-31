@@ -78,7 +78,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
             queryData.setMyUsername(cursor.getString(0));
             queryData.setMyPassword(cursor.getString(2));
             queryData.setMyEmail(cursor.getString(1));
-
         }
         else
         {

@@ -3,7 +3,7 @@ services:
     openpose-server:
         build: ./openpose-server
         ports:
-            - 80:80
+            - 5001:5001
         depends_on:
             - db-server
     db-server:

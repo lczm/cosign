@@ -3,6 +3,8 @@ package sg.edu.np.cosign;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,7 +14,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import sg.edu.np.cosign.ui.home.HomeFragment;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.UnknownHostException;
+
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity{
 // implements View.OnTouchListener
@@ -33,6 +48,13 @@ public class MainActivity extends AppCompatActivity{
         if((dbHandler.findUser("CoSign") == null) || (dbHandler.findUser("cosign@gmail.com") == null)){
             Log.d(TAG, "onCreate: test account created");
             dbHandler.createTestAccount();
+        }
+
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new
+                    StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
         }
 
         //session = new Session(context);
@@ -59,8 +81,9 @@ public class MainActivity extends AppCompatActivity{
         //final EditText etEmail = findViewById(R.id.usernameText);
 
         Log.v(TAG, "Login with: " + etUsername.getText().toString() + ", " + etPassword.getText().toString());
-        //if(isValidUsername(etUsername.getText().toString()) && isValidPassword(etPassword.getText().toString()))
-        if(isValidUser(etUsername.getText().toString(),etPassword.getText().toString()))
+
+        // if(isValidUser(etUsername.getText().toString(),etPassword.getText().toString()))
+        if (isValidUserPost(etUsername.getText().toString(), etPassword.getText().toString()))
         {
             Intent intent = new Intent(MainActivity.this, BottomNavigation.class);
             Toast.makeText(MainActivity.this, "Welcome, " + etUsername.getText().toString(), Toast.LENGTH_LONG).show();
@@ -91,6 +114,37 @@ public class MainActivity extends AppCompatActivity{
         }
         //Log.d
         return valid;
+    }
+
+    public boolean isValidUserPost(String username, String password)
+    {
+        try {
+
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("email", username);
+                jsonObject.put("password", password);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url("http://35.229.247.145:5000/login")
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            int responseCode = response.code();
+            if (responseCode == 200) {
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 

@@ -17,7 +17,6 @@ public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
     // Constructor
     public DemoCollectionPagerAdapter(FragmentManager fm) {
         super(fm);
-        pageTitleHashMap.put(0, "Object 0");
         pageTitleHashMap.put(1, "Object 1");
         pageTitleHashMap.put(2, "Object 2");
         pageTitleHashMap.put(3, "Object 3");

@@ -11,11 +11,11 @@ import java.util.HashMap;
 
 // Since this is an object collection, use a FragmentStatePagerAdapter,
 // and NOT a FragmentPagerAdapter.
-public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
+public class StatisticsCollectionPagerAdapter extends FragmentStatePagerAdapter {
 
     private HashMap<Integer, String> pageTitleHashMap = new HashMap<>();
     // Constructor
-    public DemoCollectionPagerAdapter(FragmentManager fm) {
+    public StatisticsCollectionPagerAdapter(FragmentManager fm) {
         super(fm);
         pageTitleHashMap.put(1, "Object 1");
         pageTitleHashMap.put(2, "Object 2");
@@ -25,10 +25,10 @@ public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        Fragment fragment = new DemoObjectFragment();
+        Fragment fragment = new StatisticsBarFragment();
         Bundle args = new Bundle();
         // Our object is just an integer :-P
-        args.putInt(DemoObjectFragment.ARG_OBJECT, i + 1);
+        args.putInt(StatisticsBarFragment.ARG_OBJECT, i + 1);
         fragment.setArguments(args);
         return fragment;
     }

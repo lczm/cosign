@@ -31,7 +31,7 @@ import sg.edu.np.cosign.R;
 public class StatisticsFragment extends Fragment {
 
     private StatisticsViewModel statisticsViewModel;
-    DemoCollectionPagerAdapter demoCollectionPagerAdapter;
+    StatisticsCollectionPagerAdapter statisticsCollectionPagerAdapter;
     ViewPager viewPager;
 
     @Nullable
@@ -76,9 +76,9 @@ public class StatisticsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        demoCollectionPagerAdapter= new DemoCollectionPagerAdapter((getChildFragmentManager()));
+        statisticsCollectionPagerAdapter = new StatisticsCollectionPagerAdapter((getChildFragmentManager()));
         viewPager = view.findViewById(R.id.pager);
-        viewPager.setAdapter(demoCollectionPagerAdapter);;
+        viewPager.setAdapter(statisticsCollectionPagerAdapter);;
 
 /*
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);

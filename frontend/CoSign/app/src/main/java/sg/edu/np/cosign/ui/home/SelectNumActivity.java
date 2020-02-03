@@ -1,7 +1,12 @@
 package sg.edu.np.cosign.ui.home;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import sg.edu.np.cosign.R;
+import sg.edu.np.cosign.ui.ItemAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +18,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class SelectNumActivity extends AppCompatActivity {
+public class SelectNumActivity extends AppCompatActivity implements ItemAdapter.ItemClickListener {
 
     ArrayList<String> data = new ArrayList<>();
     TextView txt;
+    ItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,45 +31,47 @@ public class SelectNumActivity extends AppCompatActivity {
 
         //populating ListView
         data=new ArrayList<>();
-        data.add("0         Zero");
-        data.add("1         One");
-        data.add("2         Two");
-        data.add("3         Three");
-        data.add("4         Four");
-        data.add("5         Five");
-        data.add("6         Six");
-        data.add("7         Seven");
-        data.add("8         Eight");
-        data.add("9         Nine");
-        data.add("10        Ten");
-        data.add("11        Eleven");
-        data.add("12        Twelve");
-        data.add("13        Thirteen");
-        data.add("14        Fourteen");
-        data.add("15        Fifteen");
-        data.add("16        Sixteen");
-        data.add("17        Seventeen");
-        data.add("18        Eighteen");
-        data.add("19        Nineteen");
-        data.add("20        Twenty");
+        data.add("Zero");
+        data.add("One");
+        data.add("Two");
+        data.add("Three");
+        data.add("Four");
+        data.add("Five");
+        data.add("Six");
+        data.add("Seven");
+        data.add("Eight");
+        data.add("Nine");
+        data.add("Ten");
+        data.add("Eleven");
+        data.add("Twelve");
+        data.add("Thirteen");
+        data.add("Fourteen");
+        data.add("Fifteen");
+        data.add("Sixteen");
+        data.add("Seventeen");
+        data.add("Eighteen");
+        data.add("Nineteen");
+        data.add("Twenty");
 
-        ArrayAdapter<String> itemsAdapter =
-                new ArrayAdapter<>(this,
-                        android.R.layout.simple_list_item_1,
-                        data);
+        RecyclerView rv = findViewById(R.id.numRV);
+        rv.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        rv.setLayoutManager(layoutManager);
+        adapter = new ItemAdapter(this, data);
+        adapter.setClickListener(this);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv.getContext(),
+                ((LinearLayoutManager) layoutManager).getOrientation());
+        rv.addItemDecoration(dividerItemDecoration);
+        rv.setAdapter(adapter);
 
-        ListView lv = findViewById(R.id.NumListView);
-        lv.setAdapter(itemsAdapter);
-        lv.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent in = new Intent(SelectNumActivity.this,
-                                LearnSign.class);
-                        in.putExtra("rowid", "" + position);
-                        startActivity(in);
-                    }
-                }
-        );
+    }
+
+    @Override
+    public void onItemClick(View view, int position)
+    {
+        Intent in = new Intent(SelectNumActivity.this,
+                LearnSign.class);
+        in.putExtra("rowid", "" + position);
+        startActivity(in);
     }
 }

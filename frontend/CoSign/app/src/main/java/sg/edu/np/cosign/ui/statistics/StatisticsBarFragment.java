@@ -31,26 +31,33 @@ public class StatisticsBarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_bar_charts_object, container, false);
-        // Create barChart
-        BarChart barChart = (BarChart) root.findViewById(R.id.barChart);
+        View barView = inflater.inflate(R.layout.fragment_bar_charts_object, container, false);
+        // Create barChart by casting
+        BarChart barChart = (BarChart)barView.findViewById(R.id.barChart);
         // Create barDataset
-        BarDataSet barDataset = new BarDataSet(getData(), "Inducesmile");
+        BarDataSet barDataset = new BarDataSet(getData(), "Insert Bar Chart Label");
+        // Set the aesthetics of the barChart
         barDataset.setBarBorderWidth(0.9f);
         barDataset.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        // Create a barData from the barDataset
         BarData barData = new BarData(barDataset);
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        final String[] months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun"};
-        IndexAxisValueFormatter formatter = new IndexAxisValueFormatter(months);
+        // x-axis labels
+        final String[] xAxisLabels = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun"};
+        IndexAxisValueFormatter formatter = new IndexAxisValueFormatter(xAxisLabels);
         xAxis.setGranularity(1f);
         xAxis.setValueFormatter(formatter);
+
+        // Setting the data of the barChart
+        // Configuring the barChart
         barChart.setData(barData);
         barChart.setFitBars(true);
         barChart.animateXY(800, 800);
         barChart.invalidate();
         barChart.setDoubleTapToZoomEnabled(false);
-        return root;
+        return barView;
     }
 
     @Override

@@ -49,6 +49,7 @@ public class StatisticsBarFragment extends Fragment {
         barChart.setFitBars(true);
         barChart.animateXY(800, 800);
         barChart.invalidate();
+        barChart.setDoubleTapToZoomEnabled(false);
         return root;
     }
 

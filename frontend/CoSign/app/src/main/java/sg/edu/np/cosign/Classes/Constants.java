@@ -11,11 +11,15 @@ public final class Constants {
     public ArrayList<String> signNames = new ArrayList<String>();
     public HashMap<String, Integer> signMapping  = new HashMap<String, Integer>();
 
+    // This number indicates how much to jump when going to Word Activity
+    public Integer jumpNumber;
+
     public Constants() {
         String alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         for (int i = 0; i < alphabets.length(); i++) {
             signNames.add(Character.toString(alphabets.charAt(i)));
         }
+
         signNames.add("Zero");
         signNames.add("One");
         signNames.add("Two");
@@ -40,5 +44,6 @@ public final class Constants {
         for (int i = 0; i < signNames.size(); i++) {
             signMapping.put(signNames.get(i), i+1);
         }
+        jumpNumber = alphabets.length() + 1;
     }
 }

@@ -41,7 +41,7 @@ public class StatisticsLineFragment extends Fragment {
 
         View lineView = inflater.inflate(R.layout.fragment_line_charts_object, container, false);
         // Create lineChart by casting
-        LineChart lineChart = (LineChart)lineView.findViewById(R.id.barChart);
+        LineChart lineChart = (LineChart)lineView.findViewById(R.id.lineChart);
         // Create  lineDataset
         LineDataSet lineDataset1 = new LineDataSet(getLineData1(), "Insert Line Chart Label 1");
         lineDataset1.setAxisDependency(YAxis.AxisDependency.LEFT);

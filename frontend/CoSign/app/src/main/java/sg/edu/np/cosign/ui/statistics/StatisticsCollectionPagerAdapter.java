@@ -49,7 +49,7 @@ public class StatisticsCollectionPagerAdapter extends FragmentStatePagerAdapter 
                 return pie2Fragment;
         }
 
-        Log.d("DEBUG", "It should not be reaching here" + i);
+        Log.d("DEBUG", "-- BAD -- It should not be reaching here : " + i);
         Fragment fragment = new StatisticsBarFragment();
         // Bundle args = new Bundle();
 

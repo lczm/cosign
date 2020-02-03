@@ -26,7 +26,7 @@ public class StatisticsCollectionPagerAdapter extends FragmentStatePagerAdapter 
     @Override
     public Fragment getItem(int i) {
         Bundle args = new Bundle();
-        switch(i) {
+        switch(i+1) {
             case 1:
                 Fragment barFragment = new StatisticsBarFragment();
                 args.putInt(StatisticsBarFragment.ARG_OBJECT, i);
@@ -48,6 +48,8 @@ public class StatisticsCollectionPagerAdapter extends FragmentStatePagerAdapter 
                 pie2Fragment.setArguments(args);
                 return pie2Fragment;
         }
+
+        Log.d("DEBUG", "It should not be reaching here" + i);
         Fragment fragment = new StatisticsBarFragment();
         // Bundle args = new Bundle();
 

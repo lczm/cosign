@@ -15,6 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -33,12 +36,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     private boolean something = false;
     private SharedPreferences prefs;
     private Constants constants = new Constants();
+    private ArrayList<Integer> favourites = new ArrayList<Integer>();
 
     // data is passed into the constructor
     public ItemAdapter(Context context, List<String> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         prefs = context.getSharedPreferences("userData", 0);
+        String email = prefs.getString("email", "No email");
+        String password = prefs.getString("password", "No Password");
+        favourites = getFavourite(email, password);
+        Log.d("DEBUG", favourites.toString());
     }
 
     // inflates the row layout from xml when needed
@@ -54,6 +62,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         String animal = mData.get(position);
         holder.itemTV.setText(animal);
         holder.positionTV.setText(Integer.toString(position + 1));
+        for (int i = 0; i < favourites.size(); i++) {
+            if (favourites.get(i) == position + 1) {
+                holder.favImgBtn.setBackgroundResource(R.drawable.red_heart);
+            }
+        }
     }
 
     // total number of rows
@@ -80,19 +93,20 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                     {
                         v.setBackgroundResource(R.drawable.black_heart);
                         Log.d("DEBUG", "Removing from Favourites");
-
                         String email = prefs.getString("email", "No email");
                         String password = prefs.getString("password", "No Password");
-
-                        Log.d("DEBUG", "Email is : " + email);
-                        Log.d("DEBUG", "Password is : " + password);
-                        // Log.d("DEBUG", "Row is : " + positionTV.getText().toString());
-                        Log.d("DEBUG", "Item Name is : " + itemTV.getText().toString());
-                        Log.d("DEBUG", "From constants : " + constants.signMapping.get(itemTV.getText().toString()));
+                        // Log.d("DEBUG", "Email is : " + email);
+                        // Log.d("DEBUG", "Password is : " + password);
+                        // Log.d("DEBUG", "Item Name is : " + itemTV.getText().toString());
+                        // Log.d("DEBUG", "From constants : " + constants.signMapping.get(itemTV.getText().toString()));
+                        postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
                         something = false;
                     } else {
                         v.setBackgroundResource(R.drawable.red_heart);
                         Log.d("DEBUG", "Adding to Favourites");
+                        String email = prefs.getString("email", "No email");
+                        String password = prefs.getString("password", "No Password");
+                        postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
                         something = true;
                     }
                 }
@@ -123,7 +137,39 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     }
 
     // POST method
-    private boolean favouriteToggle(boolean toggle, String email, String password) {
+    private boolean postFavouriteToggle(Integer sign_id, String email, String password) {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("sign_id", sign_id);
+                jsonObject.put("email", email);
+                jsonObject.put("password", password);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(Constants.serverIP + Constants.databasePort + "/bookmark")
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            int responseCode = response.code();
+            if (responseCode == 200) {
+                Log.d("DEBUG", "Successful");
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private ArrayList<Integer> getFavourite(String email, String password) {
+        ArrayList<Integer> returnFavouriteList = new ArrayList<Integer>();
         try {
             JSONObject jsonObject = new JSONObject();
             try {
@@ -137,19 +183,33 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url(Constants.serverIP + Constants.databasePort + "/login")
+                    .url(Constants.serverIP + Constants.databasePort + "/profile")
                     .post(body)
                     .build();
 
             Response response = client.newCall(request).execute();
             int responseCode = response.code();
             if (responseCode == 200) {
-                return true;
+                Log.d("DEBUG", "Successful");
+                String responseBody = response.body().string();
+                try {
+                    JSONObject responseJson = new JSONObject(responseBody);
+                    JSONObject bookmarkJson = (JSONObject)responseJson.get("bookmarks");
+                    Iterator<String> keys = bookmarkJson.keys();
+                    while(keys.hasNext()) {
+                        Integer tempInteger = Integer.parseInt(keys.next());
+                        returnFavouriteList.add(tempInteger);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return returnFavouriteList;
             }
         } catch (
-        IOException e) {
+                IOException e) {
             e.printStackTrace();
         }
-        return false;
+        Log.d("DEBUG", "Un-Successful");
+        return null;
     }
 }

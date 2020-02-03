@@ -89,9 +89,10 @@ def bookmark(form, user):
     user_id = user.user_id
     bookmark = Bookmark.query.get((user_id, sign_id))
     if bookmark:
-        return jsonify({'error': 'Handsign already bookmarked'}), 404
-    bookmark = Bookmark(user_id=user_id, sign_id=sign_id)
-    db.session.add(bookmark)
+        db.session.delete(bookmark)
+    else:
+        bookmark = Bookmark(user_id=user_id, sign_id=sign_id)
+        db.session.add(bookmark)
     db.session.commit()
     return '', 200
 

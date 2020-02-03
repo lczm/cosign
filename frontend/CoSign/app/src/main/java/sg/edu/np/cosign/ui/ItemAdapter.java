@@ -80,19 +80,20 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                     {
                         v.setBackgroundResource(R.drawable.black_heart);
                         Log.d("DEBUG", "Removing from Favourites");
-
                         String email = prefs.getString("email", "No email");
                         String password = prefs.getString("password", "No Password");
-
-                        Log.d("DEBUG", "Email is : " + email);
-                        Log.d("DEBUG", "Password is : " + password);
-                        // Log.d("DEBUG", "Row is : " + positionTV.getText().toString());
-                        Log.d("DEBUG", "Item Name is : " + itemTV.getText().toString());
-                        Log.d("DEBUG", "From constants : " + constants.signMapping.get(itemTV.getText().toString()));
+                        // Log.d("DEBUG", "Email is : " + email);
+                        // Log.d("DEBUG", "Password is : " + password);
+                        // Log.d("DEBUG", "Item Name is : " + itemTV.getText().toString());
+                        // Log.d("DEBUG", "From constants : " + constants.signMapping.get(itemTV.getText().toString()));
+                        postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
                         something = false;
                     } else {
                         v.setBackgroundResource(R.drawable.red_heart);
                         Log.d("DEBUG", "Adding to Favourites");
+                        String email = prefs.getString("email", "No email");
+                        String password = prefs.getString("password", "No Password");
+                        postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
                         something = true;
                     }
                 }
@@ -123,10 +124,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     }
 
     // POST method
-    private boolean favouriteToggle(boolean toggle, String email, String password) {
+    private boolean postFavouriteToggle(Integer sign_id, String email, String password) {
         try {
             JSONObject jsonObject = new JSONObject();
             try {
+                jsonObject.put("sign_id", sign_id);
                 jsonObject.put("email", email);
                 jsonObject.put("password", password);
             } catch (JSONException e) {
@@ -137,13 +139,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url(Constants.serverIP + Constants.databasePort + "/login")
+                    .url(Constants.serverIP + Constants.databasePort + "/bookmark")
                     .post(body)
                     .build();
 
             Response response = client.newCall(request).execute();
             int responseCode = response.code();
             if (responseCode == 200) {
+                Log.d("DEBUG", "Successful");
                 return true;
             }
         } catch (

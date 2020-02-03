@@ -40,10 +40,6 @@ def register(form):
 @app.route('/login', methods=['POST'])
 @validate_form(LoginForm)
 def login(form):
-    print('--- DEBUG ---')
-    print(form.email.data)
-    print(form.password.data)
-    print('--- DEBUG ---')
     user = User.query.filter_by(email=form.email.data).first()
     if user and bcrypt.check_password_hash(user.password, form.password.data):
         return '', 200

@@ -17,16 +17,40 @@ public class StatisticsCollectionPagerAdapter extends FragmentStatePagerAdapter 
     // Constructor
     public StatisticsCollectionPagerAdapter(FragmentManager fm) {
         super(fm);
-        pageTitleHashMap.put(1, "Object 1");
-        pageTitleHashMap.put(2, "Object 2");
-        pageTitleHashMap.put(3, "Object 3");
-        pageTitleHashMap.put(4, "Object 4");
+        pageTitleHashMap.put(1, "Bar Chart");
+        pageTitleHashMap.put(2, "Line Chart");
+        pageTitleHashMap.put(3, "Pie Chart");
+        pageTitleHashMap.put(4, "ANOTHER PIE CHART");
     }
 
     @Override
     public Fragment getItem(int i) {
-        Fragment fragment = new StatisticsBarFragment();
         Bundle args = new Bundle();
+        switch(i) {
+            case 1:
+                Fragment barFragment = new StatisticsBarFragment();
+                args.putInt(StatisticsBarFragment.ARG_OBJECT, i);
+                barFragment.setArguments(args);
+                return barFragment;
+            case 2:
+                Fragment lineFragment = new StatisticsLineFragment();
+                args.putInt(StatisticsLineFragment.ARG_OBJECT, i);
+                lineFragment.setArguments(args);
+                return lineFragment;
+            case 3:
+                Fragment pieFragment = new StatisticsPieFragment();
+                args.putInt(StatisticsPieFragment.ARG_OBJECT, i);
+                pieFragment.setArguments(args);
+                return pieFragment;
+            case 4:
+                Fragment pie2Fragment = new StatisticsPieFragment();
+                args.putInt(StatisticsPieFragment.ARG_OBJECT, i);
+                pie2Fragment.setArguments(args);
+                return pie2Fragment;
+        }
+        Fragment fragment = new StatisticsBarFragment();
+        // Bundle args = new Bundle();
+
         // Our object is just an integer :-P
         args.putInt(StatisticsBarFragment.ARG_OBJECT, i + 1);
         fragment.setArguments(args);

@@ -86,6 +86,7 @@ public class StatisticsFragment extends Fragment {
 */
     }
 
+/*
     private ArrayList getData(){
         ArrayList<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(0f, 30f));
@@ -96,5 +97,6 @@ public class StatisticsFragment extends Fragment {
         entries.add(new BarEntry(5f, 60f));
         return entries;
     }
+*/
 }
 

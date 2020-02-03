@@ -67,9 +67,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                     if (something)
                     {
                         v.setBackgroundResource(R.drawable.black_heart);
+                        Log.d("DEBUG", "Removing from Favourites");
                         something = false;
                     } else {
                         v.setBackgroundResource(R.drawable.red_heart);
+                        Log.d("DEBUG", "Adding to Favourites");
                         something = true;
                     }
                 }

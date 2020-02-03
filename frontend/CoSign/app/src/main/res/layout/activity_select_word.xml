@@ -24,14 +24,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/AlphaListView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/wordRV"
         android:layout_width="409dp"
         android:layout_height="560dp"
-        android:layout_marginEnd="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/AlphaTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

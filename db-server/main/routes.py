@@ -40,10 +40,6 @@ def register(form):
 @app.route('/login', methods=['POST'])
 @validate_form(LoginForm)
 def login(form):
-    print('--- DEBUG ---')
-    print(form.email.data)
-    print(form.password.data)
-    print('--- DEBUG ---')
     user = User.query.filter_by(email=form.email.data).first()
     if user and bcrypt.check_password_hash(user.password, form.password.data):
         return '', 200
@@ -93,9 +89,10 @@ def bookmark(form, user):
     user_id = user.user_id
     bookmark = Bookmark.query.get((user_id, sign_id))
     if bookmark:
-        return jsonify({'error': 'Handsign already bookmarked'}), 404
-    bookmark = Bookmark(user_id=user_id, sign_id=sign_id)
-    db.session.add(bookmark)
+        db.session.delete(bookmark)
+    else:
+        bookmark = Bookmark(user_id=user_id, sign_id=sign_id)
+        db.session.add(bookmark)
     db.session.commit()
     return '', 200
 

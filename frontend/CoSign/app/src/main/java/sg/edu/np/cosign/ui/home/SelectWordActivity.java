@@ -1,7 +1,12 @@
 package sg.edu.np.cosign.ui.home;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import sg.edu.np.cosign.R;
+import sg.edu.np.cosign.ui.ItemAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +18,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class SelectWordActivity extends AppCompatActivity {
+public class SelectWordActivity extends AppCompatActivity implements ItemAdapter.ItemClickListener {
 
-    ArrayList<String> data = new ArrayList<>();
+    public ArrayList<String> data = new ArrayList<>();
     TextView txt;
+    ItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,23 +62,25 @@ public class SelectWordActivity extends AppCompatActivity {
         data.add("Y");
         data.add("Z");
 
-        ArrayAdapter<String> itemsAdapter =
-                new ArrayAdapter<>(this,
-                        android.R.layout.simple_list_item_1,
-                        data);
+        RecyclerView rv = findViewById(R.id.wordRV);
+        rv.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        rv.setLayoutManager(layoutManager);
+        adapter = new ItemAdapter(this, data);
+        adapter.setClickListener(this);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv.getContext(),
+                ((LinearLayoutManager) layoutManager).getOrientation());
+        rv.addItemDecoration(dividerItemDecoration);
+        rv.setAdapter(adapter);
 
-        ListView lv = findViewById(R.id.AlphaListView);
-        lv.setAdapter(itemsAdapter);
-        lv.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent in = new Intent(SelectWordActivity.this,
-                                LearnSign.class);
-                        in.putExtra("rowid", "" + position);
-                        startActivity(in);
-                    }
-                }
-        );
+    }
+
+    @Override
+    public void onItemClick(View view, int position)
+    {
+        Intent in = new Intent(SelectWordActivity.this,
+                LearnSign.class);
+        in.putExtra("rowid", "" + position);
+        startActivity(in);
     }
 }

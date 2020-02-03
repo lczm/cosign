@@ -15,6 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -33,12 +36,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     private boolean something = false;
     private SharedPreferences prefs;
     private Constants constants = new Constants();
+    private ArrayList<Integer> favourites = new ArrayList<Integer>();
 
     // data is passed into the constructor
     public ItemAdapter(Context context, List<String> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         prefs = context.getSharedPreferences("userData", 0);
+        String email = prefs.getString("email", "No email");
+        String password = prefs.getString("password", "No Password");
+        favourites = getFavourite(email, password);
+        Log.d("DEBUG", favourites.toString());
     }
 
     // inflates the row layout from xml when needed
@@ -54,6 +62,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         String animal = mData.get(position);
         holder.itemTV.setText(animal);
         holder.positionTV.setText(Integer.toString(position + 1));
+        for (int i = 0; i < favourites.size(); i++) {
+            if (favourites.get(i) == position + 1) {
+                holder.favImgBtn.setBackgroundResource(R.drawable.red_heart);
+            }
+        }
     }
 
     // total number of rows
@@ -149,10 +162,54 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                 Log.d("DEBUG", "Successful");
                 return true;
             }
-        } catch (
-        IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private ArrayList<Integer> getFavourite(String email, String password) {
+        ArrayList<Integer> returnFavouriteList = new ArrayList<Integer>();
+        try {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("email", email);
+                jsonObject.put("password", password);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(Constants.serverIP + Constants.databasePort + "/profile")
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            int responseCode = response.code();
+            if (responseCode == 200) {
+                Log.d("DEBUG", "Successful");
+                String responseBody = response.body().string();
+                try {
+                    JSONObject responseJson = new JSONObject(responseBody);
+                    JSONObject bookmarkJson = (JSONObject)responseJson.get("bookmarks");
+                    Iterator<String> keys = bookmarkJson.keys();
+                    while(keys.hasNext()) {
+                        Integer tempInteger = Integer.parseInt(keys.next());
+                        returnFavouriteList.add(tempInteger);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return returnFavouriteList;
+            }
+        } catch (
+                IOException e) {
+            e.printStackTrace();
+        }
+        Log.d("DEBUG", "Un-Successful");
+        return null;
     }
 }

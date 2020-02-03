@@ -112,7 +112,7 @@ def handsigns():
         }
     return jsonify({'signs': signs, 'categories': categories})
 
-@app.route('/profile', methods=['GET'])
+@app.route('/profile', methods=['POST'])
 @login_required
 def profile(user):
     learns = {sign.sign_id: {'date': sign.date} for sign in user.learns}

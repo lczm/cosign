@@ -75,6 +75,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import sg.edu.np.cosign.Classes.AutoFitTextureView;
+import sg.edu.np.cosign.Classes.Constants;
 
 public class Camera2Fragment extends Fragment
         implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -393,13 +394,14 @@ public class Camera2Fragment extends Fragment
                     .addFormDataPart("file","pic.png", RequestBody.create(MEDIA_TYPE_PNG, file)).build();
 
             Request request = new Request.Builder()
-                    .url("http://35.234.57.251/image")
+                    // .url("http://35.229.247.145:5001/image")
+                    .url(Constants.serverIP + Constants.predictionPort + "/image")
                     .post(req)
                     .build();
 
             OkHttpClient client = new OkHttpClient();
             Response response = client.newCall(request).execute();
-            Log.d("response", "uploadImage:"+response.body().string());
+            Log.d("DEBUG", "uploadImage:"+response.body().string());
 
             return new JSONObject(response.body().string());
 

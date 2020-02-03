@@ -1,7 +1,7 @@
 package sg.edu.np.cosign.ui;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +11,18 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import sg.edu.np.cosign.Classes.Constants;
 import sg.edu.np.cosign.R;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
@@ -21,11 +31,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     private boolean something = false;
+    private SharedPreferences prefs;
+    private Constants constants = new Constants();
 
     // data is passed into the constructor
     public ItemAdapter(Context context, List<String> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        prefs = context.getSharedPreferences("userData", 0);
     }
 
     // inflates the row layout from xml when needed
@@ -49,7 +62,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         return mData.size();
     }
 
-
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView itemTV;
@@ -68,6 +80,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                     {
                         v.setBackgroundResource(R.drawable.black_heart);
                         Log.d("DEBUG", "Removing from Favourites");
+
+                        String email = prefs.getString("email", "No email");
+                        String password = prefs.getString("password", "No Password");
+
+                        Log.d("DEBUG", "Email is : " + email);
+                        Log.d("DEBUG", "Password is : " + password);
+                        // Log.d("DEBUG", "Row is : " + positionTV.getText().toString());
+                        Log.d("DEBUG", "Item Name is : " + itemTV.getText().toString());
+                        Log.d("DEBUG", "From constants : " + constants.signMapping.get(itemTV.getText().toString()));
                         something = false;
                     } else {
                         v.setBackgroundResource(R.drawable.red_heart);
@@ -99,5 +120,36 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+    }
+
+    // POST method
+    private boolean favouriteToggle(boolean toggle, String email, String password) {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("email", email);
+                jsonObject.put("password", password);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(Constants.serverIP + Constants.databasePort + "/login")
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            int responseCode = response.code();
+            if (responseCode == 200) {
+                return true;
+            }
+        } catch (
+        IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

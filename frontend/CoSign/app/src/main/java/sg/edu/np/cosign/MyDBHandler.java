@@ -87,4 +87,22 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return queryData;
     }
 
+    public UserData getAllUsers()
+    {
+        String query = "SELECT * FROM " + ACCOUNTS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                UserData userData = new UserData();
+                String email = cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL));
+                Log.d("DEBUG", "Email is : " + email);
+            } while(cursor.moveToNext());
+        }
+
+        UserData queryData = new UserData();
+        return queryData;
+    }
+
 }

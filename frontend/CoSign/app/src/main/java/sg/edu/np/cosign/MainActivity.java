@@ -2,6 +2,7 @@ package sg.edu.np.cosign;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity{
     private TextView tv_NewUser;
     //Context context = this;
     //private Session session;
-
+    private UserData userData;
     MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
     @Override
@@ -117,12 +118,12 @@ public class MainActivity extends AppCompatActivity{
         return valid;
     }
 
-    public boolean isValidUserPost(String username, String password)
+    public boolean isValidUserPost(String email, String password)
     {
         try {
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("email", username);
+                jsonObject.put("email", email);
                 jsonObject.put("password", password);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -140,6 +141,22 @@ public class MainActivity extends AppCompatActivity{
             Response response = client.newCall(request).execute();
             int responseCode = response.code();
             if (responseCode == 200) {
+                // Store the user data here
+/*
+                SharedPreferences.Editor editor = getSharedPreferences(
+                        "userData", MODE_PRIVATE).edit();
+                editor.putString("email", email);
+                editor.putString("password", password);
+                editor.apply();
+*/
+
+                SharedPreferences pref = getApplicationContext().
+                        getSharedPreferences("userData", 0);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("email", email);
+                editor.putString("password", password);
+                editor.commit();
+
                 return true;
             }
         } catch (IOException e) {

@@ -9,7 +9,13 @@ public final class Constants {
     public static final String predictionPort = ":5001";
 
     public ArrayList<String> signNames = new ArrayList<String>();
+
+    // signMapping
+    // "Two" : 3 -> Don't know if this is accurate but this is how it is represented
+    // reverseSignMapping
+    // 3: "Two" -> Same representation as signMapping but reversed
     public HashMap<String, Integer> signMapping  = new HashMap<String, Integer>();
+    public HashMap<Integer, String> reverseSignMapping = new HashMap<Integer, String>();
 
     // This number indicates how much to jump when going to Word Activity
     public Integer jumpNumber;
@@ -43,6 +49,7 @@ public final class Constants {
         signNames.add("Twenty");
         for (int i = 0; i < signNames.size(); i++) {
             signMapping.put(signNames.get(i), i+1);
+            reverseSignMapping.put(i+1, signNames.get(i));
         }
         jumpNumber = alphabets.length() + 1;
     }

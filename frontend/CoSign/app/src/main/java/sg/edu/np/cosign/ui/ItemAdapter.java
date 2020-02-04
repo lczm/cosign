@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,12 +39,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     private Constants constants = new Constants();
     private ArrayList<Integer> favourites = new ArrayList<Integer>();
     private String activityName;
+    private Context context;
 
     // data is passed into the constructor
     public ItemAdapter(Context context, List<String> data, String activityName) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.activityName = activityName;
+        this.context = context;
         prefs = context.getSharedPreferences("userData", 0);
         String email = prefs.getString("email", "No email");
         String password = prefs.getString("password", "No Password");
@@ -103,23 +106,33 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                 public void onClick(View v) {
                     if (something)
                     {
-                        v.setBackgroundResource(R.drawable.black_heart);
+                        // Logging
                         Log.d("DEBUG", "Removing from Favourites");
+                        v.setBackgroundResource(R.drawable.black_heart);
                         String email = prefs.getString("email", "No email");
                         String password = prefs.getString("password", "No Password");
-                        // Log.d("DEBUG", "Email is : " + email);
-                        // Log.d("DEBUG", "Password is : " + password);
-                        // Log.d("DEBUG", "Item Name is : " + itemTV.getText().toString());
-                        // Log.d("DEBUG", "From constants : " + constants.signMapping.get(itemTV.getText().toString()));
-                        postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
-                        something = false;
+                        boolean response = postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
+                        if (response == true) {
+                            Toast.makeText(context, "Adding to favourites : " + itemTV.getText().toString(), Toast.LENGTH_LONG).show();
+                            something = false;
+                        }
+                        else {
+                            Toast.makeText(context, "Something has gone wrong! Please contact the administrator." + itemTV.getText().toString(), Toast.LENGTH_LONG).show();
+                        }
                     } else {
-                        v.setBackgroundResource(R.drawable.red_heart);
+                        // Logging
                         Log.d("DEBUG", "Adding to Favourites");
+                        v.setBackgroundResource(R.drawable.red_heart);
                         String email = prefs.getString("email", "No email");
                         String password = prefs.getString("password", "No Password");
-                        postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
-                        something = true;
+                        boolean response = postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
+                        if (response == true) {
+                            Toast.makeText(context, "Adding to favourites : " + itemTV.getText().toString(), Toast.LENGTH_LONG).show();
+                            something = true;
+                        }
+                        else {
+                            Toast.makeText(context, "Something has gone wrong! Please contact the administrator." + itemTV.getText().toString(), Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             });

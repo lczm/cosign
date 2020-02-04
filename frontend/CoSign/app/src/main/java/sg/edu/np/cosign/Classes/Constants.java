@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public final class Constants {
     public static final String serverIP       = "http://35.229.247.145";
-    public static final String databasePort   = ":5000";
+    public static final String databasePort   = ":80";
     public static final String predictionPort = ":5001";
 
     public ArrayList<String> signNames = new ArrayList<String>();

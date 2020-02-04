@@ -66,7 +66,7 @@ public class SelectWordActivity extends AppCompatActivity implements ItemAdapter
         rv.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
-        adapter = new ItemAdapter(this, data);
+        adapter = new ItemAdapter(this, data, "Word");
         adapter.setClickListener(this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv.getContext(),
                 ((LinearLayoutManager) layoutManager).getOrientation());

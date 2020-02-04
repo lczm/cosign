@@ -37,11 +37,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     private SharedPreferences prefs;
     private Constants constants = new Constants();
     private ArrayList<Integer> favourites = new ArrayList<Integer>();
+    private String activityName;
 
     // data is passed into the constructor
-    public ItemAdapter(Context context, List<String> data) {
+    public ItemAdapter(Context context, List<String> data, String activityName) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        this.activityName = activityName;
         prefs = context.getSharedPreferences("userData", 0);
         String email = prefs.getString("email", "No email");
         String password = prefs.getString("password", "No Password");
@@ -61,10 +63,20 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     public void onBindViewHolder(ViewHolder holder, int position) {
         String animal = mData.get(position);
         holder.itemTV.setText(animal);
-        holder.positionTV.setText(Integer.toString(position + 1));
-        for (int i = 0; i < favourites.size(); i++) {
-            if (favourites.get(i) == position + 1) {
-                holder.favImgBtn.setBackgroundResource(R.drawable.red_heart);
+        if (activityName == "Word") {
+            holder.positionTV.setText(Integer.toString(position + 1));
+            for (int i = 0; i < favourites.size(); i++) {
+                if (favourites.get(i) == position + 1) {
+                    holder.favImgBtn.setBackgroundResource(R.drawable.red_heart);
+                }
+            }
+        }
+        else if (activityName == "Number") {
+            holder.positionTV.setText(Integer.toString(position + 1 + constants.jumpNumber));
+            for (int i = 0; i < favourites.size(); i++) {
+                if (favourites.get(i) == position + 1 + constants.jumpNumber) {
+                    holder.favImgBtn.setBackgroundResource(R.drawable.red_heart);
+                }
             }
         }
     }

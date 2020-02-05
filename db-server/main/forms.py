@@ -28,5 +28,5 @@ class BookmarkForm(Form):
     
 class GoalForm(Form):
     goal_id     = IntegerField('goal_id',   validators=[InputRequired()])
-    date        = DateField('date',         validators=[InputRequired()])
+    date        = DateField('date', format='%d/%m/%Y' validators=[InputRequired()])
     amount      = IntegerField('amount',    validators=[InputRequired()])

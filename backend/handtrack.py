@@ -74,30 +74,40 @@ def getbox(score_thresh, scores, boxes, im_width, im_height, image_np):
 detection_graph, sess = load_inference_graph()
 
 # Create an image
-width = Image.open('./datasetimage2.png').width
-height = Image.open('./datasetimage2.png').height
-img_np = np.array(Image.open('./datasetimage2.png'))
+image_name = '../mobileImage.png'
+width = Image.open(image_name).width
+height = Image.open(image_name).height
+img_np = np.array(Image.open(image_name))
 # img_np = cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)
 
 relative_boxes, scores, classes = detect_objects(img_np, detection_graph, sess)
 box_relative2absolute = lambda box: (box[1] * width, box[3] * width, box[0] * height, box[2] * height)
 # hand_boxes = [box_relative2absolute(box)  for box,score in zip(relative_boxes,scores) if score > 0.8]
 
-hand_boxes = getbox(0.8, scores, relative_boxes, width, height, img_np)
+hand_boxes = getbox(0.4, scores, relative_boxes, width, height, img_np)
 print(hand_boxes)
 # for i in range(len(relative_boxes)):
 #     if scores[i] > 0.8:
 #         hand_boxes.append(box_relative2absolute(relative_boxes[i]))
 
 # Show the image
-image = np.array(Image.open('datasetimage2.png'))
+image = np.array(Image.open(image_name))
 fig, ax = plt.subplots(1)
 ax.imshow(image)
+
+print("Amount of hands : ", len(hand_boxes))
 
 for box in hand_boxes:
     rect = patches.Rectangle((box[0][0], box[0][1]), box[1][0] - box[0][0], box[1][1] - box[0][1], linewidth=1, edgecolor='r', facecolor='none')
     ax.add_patch(rect)
 
+coords = np.load('../coords.npy')
+for x in coords[0]:
+    print(x[0], x[1])
+    # ax.add_patch(plt.Circle((x[0], x[1]), 0.2, color='r'))
+    plt.plot(x[0], x[1], 'bo')
+
+ax.plot()
 plt.show()
 
 # print('relative_boxes', relative_boxes)

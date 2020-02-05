@@ -141,4 +141,48 @@ public final class Constants {
         }
         return false;
     }
+
+    public ArrayList<Integer> getGoal(String email, String password) {
+        ArrayList<Integer> returnFavouriteList = new ArrayList<Integer>();
+        try {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("email", email);
+                jsonObject.put("password", password);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(Constants.serverIP + Constants.databasePort + "/profile")
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            int responseCode = response.code();
+            if (responseCode == 200) {
+                Log.d("DEBUG", "Successful");
+                String responseBody = response.body().string();
+                try {
+                    JSONObject responseJson = new JSONObject(responseBody);
+                    JSONObject learns = (JSONObject)responseJson.get("learns");
+                    Iterator<String> keys = learns.keys();
+                    while(keys.hasNext()) {
+                        Integer tempInteger = Integer.parseInt(keys.next());
+                        returnFavouriteList.add(tempInteger);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return returnFavouriteList;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d("DEBUG", "Un-Successful");
+        return null;
+    }
 }

@@ -29,9 +29,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ImageV
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        Log.d("SHIT FUCK AAAAAAAA", images.toString());
+        Log.d("AAAAAAAA", images.toString());
         int image_id = images[position];
-        Log.d("SHIT FUCK AAAAAAAA", Integer.toString(image_id));
+        Log.d("AAAAAAAA", Integer.toString(image_id));
         holder.CategoryImage.setImageResource(image_id);
     }
 

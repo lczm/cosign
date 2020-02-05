@@ -1,5 +1,6 @@
 package sg.edu.np.cosign.Classes;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -142,7 +143,7 @@ public final class Constants {
         return false;
     }
 
-    public ArrayList<Integer> getGoal(String email, String password) {
+    public ArrayList<Integer> getLearntIds(String email, String password) {
         ArrayList<Integer> returnFavouriteList = new ArrayList<Integer>();
         try {
             JSONObject jsonObject = new JSONObject();

@@ -1,5 +1,7 @@
 package sg.edu.np.cosign.ui.statistics;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -25,17 +28,21 @@ import sg.edu.np.cosign.R;
 public class StatisticsPieFragmentGoals extends Fragment {
     public static final String ARG_OBJECT = "object";
     private Constants constants = new Constants();
+    private SharedPreferences prefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View pieView = inflater.inflate(R.layout.fragment_pie_charts_object, container, false);
         PieChart pieChart = pieView.findViewById(R.id.pieChart);
-        PieDataSet set = new PieDataSet(getData(), "Results");
-        set.setColors(ColorTemplate.COLORFUL_COLORS);
+        PieDataSet set = new PieDataSet(getData(), "Currently learnt against Words to learn");
+        set.setColors(ColorTemplate.JOYFUL_COLORS);
         PieData data = new PieData(set);
 
         pieChart.setData(data);
+        Description d = new Description();
+        d.setText("");
+        pieChart.setDescription(d);
         pieChart.invalidate();
         return pieView;
     }
@@ -51,12 +58,15 @@ public class StatisticsPieFragmentGoals extends Fragment {
 
     private ArrayList getData(){
         ArrayList<PieEntry> entries = new ArrayList<>();
-        // Note, "Green", "Yellow"... are not the colours of the individual pies
-        // They are just labels, misleading but to be changed in the future
-        entries.add(new PieEntry(12.5f, "Green"));
-        entries.add(new PieEntry(26.7f, "Yellow"));
-        entries.add(new PieEntry(24.0f, "Red"));
-        entries.add(new PieEntry(30.8f, "Blue"));
+
+        prefs = getContext().getSharedPreferences("userData", 0);
+        String email = prefs.getString("email", "No email");
+        String password = prefs.getString("password", "No Password");
+        ArrayList<Integer> learntIds = constants.getLearntIds(email, password);
+
+        entries.add(new PieEntry(learntIds.size(), "Learnt"));
+        entries.add(new PieEntry(20 - learntIds.size(), "Want to learn"));
+
         return entries;
     }
 

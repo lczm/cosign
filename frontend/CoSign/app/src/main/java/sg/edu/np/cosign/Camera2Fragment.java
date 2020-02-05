@@ -39,6 +39,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -300,6 +301,10 @@ public class Camera2Fragment extends Fragment
 
     private static JSONObject answerJSON;
 
+    private String signInstruction;
+
+    TextView signInstructionTV;
+
     /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
      */
@@ -385,6 +390,12 @@ public class Camera2Fragment extends Fragment
         }
     }
 
+    public void setSignText(String text) {
+       // TextView signInstructionTV = this.getView().findViewById(R.id.signInstructionTV);
+       // signInstructionTV.setText(text);
+        signInstruction = text;
+    }
+
     private static JSONObject uploadImage(byte[] file) {
         try {
 
@@ -401,9 +412,12 @@ public class Camera2Fragment extends Fragment
 
             OkHttpClient client = new OkHttpClient();
             Response response = client.newCall(request).execute();
-            Log.d("DEBUG", "uploadImage:"+response.body().string());
+            String responseJSON = response.body().string();
 
-            return new JSONObject(response.body().string());
+            Log.d("DEBUG", "uploadImage:"+responseJSON);
+
+
+            return new JSONObject(responseJSON);
 
         } catch (UnknownHostException | UnsupportedEncodingException e) {
             Log.e(TAG, "Error: " + e.getLocalizedMessage());
@@ -412,6 +426,7 @@ public class Camera2Fragment extends Fragment
         }
         return null;
     }
+
 
     /**
      * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that
@@ -476,6 +491,8 @@ public class Camera2Fragment extends Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.picture).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        signInstructionTV = (TextView) view.findViewById(R.id.signInstructionTV);
+        signInstructionTV.setText("Try Signing " + signInstruction + "!");
     }
 
     @Override

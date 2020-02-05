@@ -49,7 +49,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         prefs = context.getSharedPreferences("userData", 0);
         String email = prefs.getString("email", "No email");
         String password = prefs.getString("password", "No Password");
-        favourites = getFavourite(email, password);
+        favourites = constants.getFavourite(email, password);
         Log.d("DEBUG", favourites.toString());
     }
 
@@ -110,7 +110,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                         v.setBackgroundResource(R.drawable.black_heart);
                         String email = prefs.getString("email", "No email");
                         String password = prefs.getString("password", "No Password");
-                        boolean response = postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
+                        boolean response = constants.postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
                         if (response == true) {
                             Toast.makeText(context, "Removing from favourites : " + itemTV.getText().toString(), Toast.LENGTH_LONG).show();
                         }
@@ -124,7 +124,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                         v.setBackgroundResource(R.drawable.red_heart);
                         String email = prefs.getString("email", "No email");
                         String password = prefs.getString("password", "No Password");
-                        boolean response = postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
+                        boolean response = constants.postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
                         if (response == true) {
                             Toast.makeText(context, "Adding to favourites : " + itemTV.getText().toString(), Toast.LENGTH_LONG).show();
                         }
@@ -158,82 +158,5 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
-    }
-
-    // POST method
-    private boolean postFavouriteToggle(Integer sign_id, String email, String password) {
-        try {
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("sign_id", sign_id);
-                jsonObject.put("email", email);
-                jsonObject.put("password", password);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-            RequestBody body = RequestBody.create(JSON, jsonObject.toString());
-
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(Constants.serverIP + Constants.databasePort + "/bookmark")
-                    .post(body)
-                    .build();
-
-            Response response = client.newCall(request).execute();
-            int responseCode = response.code();
-            if (responseCode == 200) {
-                Log.d("DEBUG", "Successful");
-                return true;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private ArrayList<Integer> getFavourite(String email, String password) {
-        ArrayList<Integer> returnFavouriteList = new ArrayList<Integer>();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("email", email);
-                jsonObject.put("password", password);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-            RequestBody body = RequestBody.create(JSON, jsonObject.toString());
-
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(Constants.serverIP + Constants.databasePort + "/profile")
-                    .post(body)
-                    .build();
-
-            Response response = client.newCall(request).execute();
-            int responseCode = response.code();
-            if (responseCode == 200) {
-                Log.d("DEBUG", "Successful");
-                String responseBody = response.body().string();
-                try {
-                    JSONObject responseJson = new JSONObject(responseBody);
-                    JSONObject bookmarkJson = (JSONObject)responseJson.get("bookmarks");
-                    Iterator<String> keys = bookmarkJson.keys();
-                    while(keys.hasNext()) {
-                        Integer tempInteger = Integer.parseInt(keys.next());
-                        returnFavouriteList.add(tempInteger);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return returnFavouriteList;
-            }
-        } catch (
-                IOException e) {
-            e.printStackTrace();
-        }
-        Log.d("DEBUG", "Un-Successful");
-        return null;
     }
 }

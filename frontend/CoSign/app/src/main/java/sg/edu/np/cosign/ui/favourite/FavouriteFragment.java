@@ -31,6 +31,7 @@ import sg.edu.np.cosign.R;
 public class FavouriteFragment extends Fragment {
 
     private FavouriteViewModel favouriteViewModel;
+    private Constants constants = new Constants();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +93,4 @@ public class FavouriteFragment extends Fragment {
         Log.d("DEBUG", "Un-Successful");
         return null;
     }
-
-
 }

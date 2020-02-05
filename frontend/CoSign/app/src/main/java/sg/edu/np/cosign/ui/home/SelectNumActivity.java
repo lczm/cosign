@@ -71,7 +71,9 @@ public class SelectNumActivity extends AppCompatActivity implements ItemAdapter.
     {
         Intent in = new Intent(SelectNumActivity.this,
                 LearnSign.class);
-        in.putExtra("rowid", "" + position);
+        in.putExtra("pos", "" + position);
+        in.putExtra("wordOrNum", "num");
+        in.putExtra("data", data);
         startActivity(in);
     }
 }

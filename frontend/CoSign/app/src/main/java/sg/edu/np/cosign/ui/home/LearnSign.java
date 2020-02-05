@@ -17,6 +17,8 @@ import java.util.Objects;
 
 public class LearnSign extends AppCompatActivity {
 
+    String charOrNum;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +31,7 @@ public class LearnSign extends AppCompatActivity {
         String pos = in.getStringExtra("pos");
         String signType = in.getStringExtra("wordOrNum");
         ArrayList<String> data = in.getStringArrayListExtra("data");
-        String charOrNum = data.get(Integer.parseInt(pos));
+        charOrNum = data.get(Integer.parseInt(pos));
 
         if (Objects.equals(signType, "word"))
         {
@@ -46,6 +48,7 @@ public class LearnSign extends AppCompatActivity {
 
     public void sendToCamera(View view) {
         Intent deliverToCamera = new Intent(this, Camera2Activity.class);
+        deliverToCamera.putExtra("charOrNum", charOrNum);
         startActivity(deliverToCamera);
     }
 }

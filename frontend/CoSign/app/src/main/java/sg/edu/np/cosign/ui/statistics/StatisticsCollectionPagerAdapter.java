@@ -41,10 +41,10 @@ public class StatisticsCollectionPagerAdapter extends FragmentStatePagerAdapter 
                 pieFragmentAll.setArguments(args);
                 return pieFragmentAll;
             case 3:
-                Fragment lineFragment = new StatisticsLineFragment();
-                args.putInt(StatisticsLineFragment.ARG_OBJECT, i);
-                lineFragment.setArguments(args);
-                return lineFragment;
+                Fragment barFragment = new StatisticsBarFragment();
+                args.putInt(StatisticsBarFragment.ARG_OBJECT, i);
+                barFragment.setArguments(args);
+                return barFragment;
         }
 
         Log.d("DEBUG", "-- BAD -- It should not be reaching here : " + i);

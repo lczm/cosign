@@ -4,7 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
+
+import java.util.HashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,13 +28,14 @@ public class ProfileFragment extends Fragment {
         profileViewModel =
                 ViewModelProviders.of(this).get(ProfileViewModel.class);
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
-        final TextView textView = root.findViewById(R.id.text_profile);
+        /*final TextView textView = root.findViewById(R.id.hellotxt);
         profileViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
-        });
+        });*/
         return root;
+
     }
 }

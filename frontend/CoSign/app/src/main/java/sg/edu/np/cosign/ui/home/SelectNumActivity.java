@@ -31,7 +31,7 @@ public class SelectNumActivity extends AppCompatActivity implements ItemAdapter.
 
         //populating ListView
         data=new ArrayList<>();
-        data.add("Zero");
+        // data.add("Zero");
         data.add("One");
         data.add("Two");
         data.add("Three");
@@ -41,17 +41,17 @@ public class SelectNumActivity extends AppCompatActivity implements ItemAdapter.
         data.add("Seven");
         data.add("Eight");
         data.add("Nine");
-        data.add("Ten");
-        data.add("Eleven");
-        data.add("Twelve");
-        data.add("Thirteen");
-        data.add("Fourteen");
-        data.add("Fifteen");
-        data.add("Sixteen");
-        data.add("Seventeen");
-        data.add("Eighteen");
-        data.add("Nineteen");
-        data.add("Twenty");
+        // data.add("Ten");
+        // data.add("Eleven");
+        // data.add("Twelve");
+        // data.add("Thirteen");
+        // data.add("Fourteen");
+        // data.add("Fifteen");
+        // data.add("Sixteen");
+        // data.add("Seventeen");
+        // data.add("Eighteen");
+        // data.add("Nineteen");
+        // data.add("Twenty");
 
         RecyclerView rv = findViewById(R.id.numRV);
         rv.setHasFixedSize(true);

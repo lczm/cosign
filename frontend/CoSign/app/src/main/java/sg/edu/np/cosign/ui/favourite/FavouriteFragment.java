@@ -1,5 +1,7 @@
 package sg.edu.np.cosign.ui.favourite;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,11 +14,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -27,11 +33,24 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import sg.edu.np.cosign.Classes.Constants;
 import sg.edu.np.cosign.R;
+import sg.edu.np.cosign.ui.ItemAdapter;
+import sg.edu.np.cosign.ui.home.LearnSign;
+import sg.edu.np.cosign.ui.home.SelectWordActivity;
 
 public class FavouriteFragment extends Fragment {
 
     private FavouriteViewModel favouriteViewModel;
     private Constants constants = new Constants();
+    SharedPreferences prefs;
+    ItemAdapter adapter;
+
+    public ArrayList<String> allAlpha = new ArrayList<>();
+    public ArrayList<String> allNumber = new ArrayList<>();
+    public ArrayList<Integer> disabledAlphaPos = new ArrayList<>();
+    //public ArrayList<String> getAlpha = new ArrayList<>();
+    //public ArrayList<String> getnumber = new ArrayList<>();
+
+    RecyclerView favRV;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +64,70 @@ public class FavouriteFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        prefs = getContext().getSharedPreferences("userData", 0);
+        String email = prefs.getString("email", "No email");
+        String password = prefs.getString("password", "No Password");
+
+        // populate allAlpha list with all alpha
+        allAlpha.add("A");
+        allAlpha.add("B");
+        allAlpha.add("C");
+        allAlpha.add("D");
+        allAlpha.add("E");
+        allAlpha.add("F");
+        allAlpha.add("G");
+        allAlpha.add("H");
+        allAlpha.add("I");
+        allAlpha.add("J");
+        allAlpha.add("K");
+        allAlpha.add("L");
+        allAlpha.add("M");
+        allAlpha.add("N");
+        allAlpha.add("O");
+        allAlpha.add("P");
+        allAlpha.add("Q");
+        allAlpha.add("R");
+        allAlpha.add("S");
+        allAlpha.add("T");
+        allAlpha.add("U");
+        allAlpha.add("V");
+        allAlpha.add("W");
+        allAlpha.add("X");
+        allAlpha.add("Y");
+        allAlpha.add("Z");
+
+        //populating allNumbers with numbers
+        allNumber.add("One");
+        allNumber.add("Two");
+        allNumber.add("Three");
+        allNumber.add("Four");
+        allNumber.add("Five");
+        allNumber.add("Six");
+        allNumber.add("Seven");
+        allNumber.add("Eight");
+        allNumber.add("Nine");
+
+
+        disabledAlphaPos.add(9);
+        disabledAlphaPos.add(25);
+
+
+        allNumber.retainAll(getFavourite(email, password));
+        allAlpha.retainAll(getFavourite(email, password));
+
+
+        favRV = (RecyclerView) root.findViewById(R.id.favAlphaRV);
+        favRV.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
+        favRV.setLayoutManager(layoutManager);
+        adapter = new ItemAdapter(this.getContext(), allNumber, "Number");
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(favRV.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
+        favRV.addItemDecoration(dividerItemDecoration);
+        favRV.setAdapter(adapter);
+
+
+
         return root;
     }
 
@@ -92,5 +175,17 @@ public class FavouriteFragment extends Fragment {
         }
         Log.d("DEBUG", "Un-Successful");
         return null;
+    }
+
+    public void onItemClick(View view, int position)
+    {
+        if (!disabledAlphaPos.contains(position)){
+            Intent in = new Intent(this.getActivity(),
+                    LearnSign.class);
+            in.putExtra("pos", "" + position);
+            in.putExtra("wordOrNum", "word");
+            in.putExtra("data", allAlpha);
+            startActivity(in);
+        }
     }
 }

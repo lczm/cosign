@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -174,6 +175,8 @@ public class Camera2Fragment extends Fragment
      */
     private AutoFitTextureView mTextureView;
 
+    private SharedPreferences prefs;
+
     /**
      * A {@link CameraCaptureSession } for camera preview.
      */
@@ -242,7 +245,10 @@ public class Camera2Fragment extends Fragment
      */
     private File mFile;
 
-    private String answer;
+    private String email;
+    private String password;
+
+    private Constants constants = new Constants();
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
@@ -266,6 +272,32 @@ public class Camera2Fragment extends Fragment
             if (randomInt < 81)
             {
                 i.putExtra("result", "I think you signed " + signInstruction + "!");
+                try {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("email", email);
+                        jsonObject.put("password", password);
+                        jsonObject.put("sign_id", constants.signMapping.get(signInstruction));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                    RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url(Constants.serverIP + Constants.databasePort + "/learn")
+                            .post(body)
+                            .build();
+
+                    Response response = client.newCall(request).execute();
+                    int responseCode = response.code();
+                    if (responseCode == 200) {
+                        Log.d("DEBUG", "Successful");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             else
             {
@@ -502,8 +534,12 @@ public class Camera2Fragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+        Context context = getActivity();
         view.findViewById(R.id.picture).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        prefs = context.getSharedPreferences("userData", 0);
+        email = prefs.getString("email", "No email");
+        password = prefs.getString("password", "No Password");
         signInstructionTV = (TextView) view.findViewById(R.id.signInstructionTV);
         signInstructionTV.setText("Try Signing " + signInstruction + "!");
     }

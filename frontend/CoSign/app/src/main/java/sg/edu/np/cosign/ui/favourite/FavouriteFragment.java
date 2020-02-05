@@ -37,7 +37,7 @@ import sg.edu.np.cosign.ui.ItemAdapter;
 import sg.edu.np.cosign.ui.home.LearnSign;
 import sg.edu.np.cosign.ui.home.SelectWordActivity;
 
-public class FavouriteFragment extends Fragment {
+public class FavouriteFragment extends Fragment implements ItemAdapter.ItemClickListener{
 
     private FavouriteViewModel favouriteViewModel;
     private Constants constants = new Constants();
@@ -46,6 +46,8 @@ public class FavouriteFragment extends Fragment {
 
     public ArrayList<String> allAlpha = new ArrayList<>();
     public ArrayList<String> allNumber = new ArrayList<>();
+    ArrayList<Integer> allFavId = new ArrayList<>();
+    ArrayList<String> allFav = new ArrayList<>();
     public ArrayList<Integer> disabledAlphaPos = new ArrayList<>();
     //public ArrayList<String> getAlpha = new ArrayList<>();
     //public ArrayList<String> getnumber = new ArrayList<>();
@@ -112,16 +114,21 @@ public class FavouriteFragment extends Fragment {
         disabledAlphaPos.add(9);
         disabledAlphaPos.add(25);
 
-
-        allNumber.retainAll(getFavourite(email, password));
-        allAlpha.retainAll(getFavourite(email, password));
+        allFavId = getFavourite(email, password);
+        for (int i = 0; i < allFavId.size(); i++)
+        {
+            String value = constants.reverseSignMapping.get(allFavId.get(i));
+            allFav.add(value);
+        }
+        allNumber.retainAll(allFav);
+        allAlpha.retainAll(allFav);
 
 
         favRV = (RecyclerView) root.findViewById(R.id.favAlphaRV);
         favRV.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         favRV.setLayoutManager(layoutManager);
-        adapter = new ItemAdapter(this.getContext(), allNumber, "Number");
+        adapter = new ItemAdapter(this.getContext(), allAlpha, "Word");
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(favRV.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
         favRV.addItemDecoration(dividerItemDecoration);
         favRV.setAdapter(adapter);
@@ -177,6 +184,7 @@ public class FavouriteFragment extends Fragment {
         return null;
     }
 
+    @Override
     public void onItemClick(View view, int position)
     {
         if (!disabledAlphaPos.contains(position)){

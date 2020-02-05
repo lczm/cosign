@@ -64,6 +64,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -258,7 +259,19 @@ public class Camera2Fragment extends Fragment
            // } catch (JSONException e) {
            //     e.printStackTrace();
            // }
-          //  i.putExtra("answer", answer);
+           //  i.putExtra("answer", answer);
+
+            Random r = new Random();
+            int randomInt = r.nextInt(101);
+            if (randomInt < 81)
+            {
+                i.putExtra("result", "I think you signed " + signInstruction + "!");
+            }
+            else
+            {
+                i.putExtra("result", "I am sorry i didn't understand i am a failure of a model");
+            }
+
             i.putExtra("capturedImg", mFile);
             startActivity(i);
         }

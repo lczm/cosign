@@ -34,10 +34,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     private List<String> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
-    private boolean something = false;
     private SharedPreferences prefs;
     private Constants constants = new Constants();
-    private ArrayList<Integer> favourites = new ArrayList<Integer>();
+    private ArrayList<Integer> favourites = new ArrayList<>();
     private String activityName;
     private Context context;
 
@@ -104,7 +103,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             favImgBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (something)
+                    if (favourites.contains(getAdapterPosition() + 1))
                     {
                         // Logging
                         Log.d("DEBUG", "Removing from Favourites");
@@ -113,12 +112,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                         String password = prefs.getString("password", "No Password");
                         boolean response = postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
                         if (response == true) {
-                            Toast.makeText(context, "Adding to favourites : " + itemTV.getText().toString(), Toast.LENGTH_LONG).show();
-                            something = false;
+                            Toast.makeText(context, "Removing from favourites : " + itemTV.getText().toString(), Toast.LENGTH_LONG).show();
                         }
                         else {
                             Toast.makeText(context, "Something has gone wrong! Please contact the administrator." + itemTV.getText().toString(), Toast.LENGTH_LONG).show();
                         }
+                        favourites.remove(Integer.valueOf(getAdapterPosition() + 1));
                     } else {
                         // Logging
                         Log.d("DEBUG", "Adding to Favourites");
@@ -128,11 +127,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                         boolean response = postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
                         if (response == true) {
                             Toast.makeText(context, "Adding to favourites : " + itemTV.getText().toString(), Toast.LENGTH_LONG).show();
-                            something = true;
                         }
                         else {
                             Toast.makeText(context, "Something has gone wrong! Please contact the administrator." + itemTV.getText().toString(), Toast.LENGTH_LONG).show();
                         }
+                        favourites.add(getAdapterPosition() + 1);
                     }
                 }
             });

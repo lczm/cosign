@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
+import java.util.Iterator;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -142,22 +143,22 @@ public class MainActivity extends AppCompatActivity{
             int responseCode = response.code();
             if (responseCode == 200) {
                 // Store the user data here
-/*
-                SharedPreferences.Editor editor = getSharedPreferences(
-                        "userData", MODE_PRIVATE).edit();
-                editor.putString("email", email);
-                editor.putString("password", password);
-                editor.apply();
-*/
+                String responseBody = response.body().string();
+                try {
+                    JSONObject responseJson = new JSONObject(responseBody);
+                    String responseUsername = responseJson.get("username").toString();
 
-                SharedPreferences pref = getApplicationContext().
-                        getSharedPreferences("userData", 0);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("email", email);
-                editor.putString("password", password);
-                editor.commit();
-
-                return true;
+                    SharedPreferences pref = getApplicationContext().
+                            getSharedPreferences("userData", 0);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("username", responseUsername);
+                    editor.putString("email", email);
+                    editor.putString("password", password);
+                    editor.commit();
+                    return true;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -165,12 +166,9 @@ public class MainActivity extends AppCompatActivity{
         return false;
     }
 
-
-
     public void sendToRegister(View view) {
         Intent goToRegister = new Intent(this, RegisterActivity.class);
         startActivity(goToRegister);
-
     }
 
 

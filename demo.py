@@ -5,9 +5,10 @@ import json
 import subprocess
 import os
 import time
+import numpy as np
 
 #with open('rfc', 'rb') as file:         model = pickle.load(file)
-with open(os.path.join(CLASSIFIERS_FOLDER, 'bc-e-b'), 'rb') as file:    model = pickle.load(file)
+with open(os.path.join(CLASSIFIERS_FOLDER, 'etc-e-f'), 'rb') as file:   model = pickle.load(file)
 with open('gloss_map', 'rb') as file:                                   gloss_map = pickle.load(file)
 
 # Start OpenPose
@@ -38,8 +39,12 @@ while True:
     if not people: continue
     keypoints = people[0]
     _, right_keypoints = process_hand_keypoints(keypoints, IMAGE_WIDTH, IMAGE_HEIGHT)
-    y = model.predict([right_keypoints])
-    gloss = gloss_map[y[0]]
+    # y = model.predict([right_keypoints])
+    # gloss = gloss_map[y[0]]
+    # print(gloss)
+    y = model.predict_proba([right_keypoints])
+    yi = np.argsort(y[0])[::-1]
+    gloss = [gloss_map[i] for i in yi]
     print(gloss)
 
     # Prepare for next

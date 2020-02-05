@@ -38,7 +38,7 @@ public class LearnSign extends AppCompatActivity {
         }
         else
         {
-            String imgName = "num" + (Integer.parseInt(pos));
+            String imgName = "num" + (Integer.parseInt(pos) + 1);
             signIV.setImageResource(getResources().getIdentifier(imgName, "drawable", this.getPackageName()));
         }
         ((TextView) findViewById(R.id.word_num_text)).setText("This is how you sign " + charOrNum + "!");

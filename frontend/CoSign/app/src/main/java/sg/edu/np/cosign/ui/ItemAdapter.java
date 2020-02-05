@@ -50,7 +50,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         String email = prefs.getString("email", "No email");
         String password = prefs.getString("password", "No Password");
         favourites = constants.getFavourite(email, password);
-        Log.d("DEBUG", favourites.toString());
     }
 
     // inflates the row layout from xml when needed

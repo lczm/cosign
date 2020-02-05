@@ -31,11 +31,17 @@ import sg.edu.np.cosign.R;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
+    // data for recyclerview e.g. A B C D E F G or liek 1 2 3 4 5 6
     private List<String> mData;
+    // dunnid to care
     private LayoutInflater mInflater;
+    // when u click smth
     private ItemClickListener mClickListener;
+    // this is like a mini database we using it to store like email n password in it so we cn access from other activity
     private SharedPreferences prefs;
+    // zeming stuff
     private Constants constants = new Constants();
+    // what u favourited
     private ArrayList<Integer> favourites = new ArrayList<>();
     private String activityName;
     private Context context;

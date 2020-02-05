@@ -35,4 +35,5 @@ class Bookmark(db.Model):
 class Goal(db.Model):
     goal_id     = db.Column(db.Integer,     primary_key=True)
     user_id     = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    date        = db.Column(db.Date,    nullable=False)
+    date        = db.Column(db.Date,        nullable=False)
+    amount      = db.Column(db.Integer,     nullable=False)

@@ -26,7 +26,6 @@
         android:layout_height="30dp"
         android:layout_weight="1"
         android:background="#00FFFFFF"
-        android:scaleType="centerInside"
-        tools:src="@drawable/black_heart" />
+        android:scaleType="centerInside" />
 
 </LinearLayout>

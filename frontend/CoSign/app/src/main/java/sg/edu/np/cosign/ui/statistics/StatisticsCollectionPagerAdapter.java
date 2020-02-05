@@ -17,10 +17,13 @@ public class StatisticsCollectionPagerAdapter extends FragmentStatePagerAdapter 
     // Constructor
     public StatisticsCollectionPagerAdapter(FragmentManager fm) {
         super(fm);
-        pageTitleHashMap.put(1, "Bar Chart");
-        pageTitleHashMap.put(2, "Line Chart");
-        pageTitleHashMap.put(3, "Pie Chart");
-        pageTitleHashMap.put(4, "ANOTHER PIE CHART");
+        // Amount of words learnt compared to goal
+        pageTitleHashMap.put(1, "Learnt against Goal");
+        // Amount of words learnt compared to the total amount of words
+        pageTitleHashMap.put(2, "Learnt against Total");
+        // Words learnt by date
+        pageTitleHashMap.put(3, "Words learnt by date");
+        // pageTitleHashMap.put(4, "USELESS CHART");
     }
 
     @Override
@@ -28,25 +31,20 @@ public class StatisticsCollectionPagerAdapter extends FragmentStatePagerAdapter 
         Bundle args = new Bundle();
         switch(i+1) {
             case 1:
-                Fragment barFragment = new StatisticsBarFragment();
-                args.putInt(StatisticsBarFragment.ARG_OBJECT, i);
-                barFragment.setArguments(args);
-                return barFragment;
+                Fragment pieFragmentGoals = new StatisticsPieFragmentGoals();
+                args.putInt(StatisticsPieFragmentGoals.ARG_OBJECT, i);
+                pieFragmentGoals.setArguments(args);
+                return pieFragmentGoals;
             case 2:
+                Fragment pieFragmentAll = new StatisticsPieFragmentAll();
+                args.putInt(StatisticsPieFragmentAll.ARG_OBJECT, i);
+                pieFragmentAll.setArguments(args);
+                return pieFragmentAll;
+            case 3:
                 Fragment lineFragment = new StatisticsLineFragment();
                 args.putInt(StatisticsLineFragment.ARG_OBJECT, i);
                 lineFragment.setArguments(args);
                 return lineFragment;
-            case 3:
-                Fragment pieFragment = new StatisticsPieFragment();
-                args.putInt(StatisticsPieFragment.ARG_OBJECT, i);
-                pieFragment.setArguments(args);
-                return pieFragment;
-            case 4:
-                Fragment pie2Fragment = new StatisticsPieFragment();
-                args.putInt(StatisticsPieFragment.ARG_OBJECT, i);
-                pie2Fragment.setArguments(args);
-                return pie2Fragment;
         }
 
         Log.d("DEBUG", "-- BAD -- It should not be reaching here : " + i);
@@ -61,7 +59,7 @@ public class StatisticsCollectionPagerAdapter extends FragmentStatePagerAdapter 
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 
     @Override

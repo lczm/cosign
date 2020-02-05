@@ -12,7 +12,9 @@ import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -31,9 +33,10 @@ public class ProfileFragment extends Fragment {
 
     private ProfileViewModel profileViewModel;
     DatePickerDialog picker;
-    EditText eText;
+    EditText eText, goal_edit;
     Button btnGet;
     TextView tvw;
+    Switch aSwitch;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class ProfileFragment extends Fragment {
             }
         });*/
         final EditText eText= root.findViewById(R.id.Date_editor);
+        final EditText goal_edit= root.findViewById(R.id.goal_et);
         eText.setInputType(InputType.TYPE_NULL);
         eText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +77,19 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 TextView tvw = getView().findViewById(R.id.textView1);
-                tvw.setText("Selected Date: "+ eText.getText());
+                tvw.setText("Selected Date: "+ eText.getText() + ", Goal: " + goal_edit.getText());
+            }
+        });
+        aSwitch = root.findViewById(R.id.Noti_switch);
+        aSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String statusSwitch;
+                if (aSwitch.isChecked())
+                    statusSwitch = aSwitch.getTextOn().toString();
+                else
+                    statusSwitch = aSwitch.getTextOff().toString();
+                Toast.makeText(getActivity().getApplicationContext(), "Notification :" + statusSwitch, Toast.LENGTH_LONG).show();
             }
         });
         return root;

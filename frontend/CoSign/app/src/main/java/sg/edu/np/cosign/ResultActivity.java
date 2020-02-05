@@ -43,6 +43,8 @@ public class ResultActivity extends AppCompatActivity {
             Bitmap myBitmap = BitmapFactory.decodeFile(img.getAbsolutePath());
 
             iv.setImageBitmap(myBitmap);
+            iv.setScaleY(-1f);
+            iv.setRotation(-90);
             answerTV.setText(result);
 
         }

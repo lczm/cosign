@@ -11,6 +11,7 @@
         android:layout_alignParentTop="true" />
 
     <FrameLayout
+        android:id="@+id/control"
         android:layout_width="match_parent"
         android:layout_height="112dp"
         android:layout_alignParentBottom="true"
@@ -27,12 +28,14 @@
     </FrameLayout>
 
     <TextView
+        android:id="@+id/signInstructionTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
-        android:text='Try Signing "A"'
+        android:text="Try It Yourself!"
+        android:textAlignment="center"
         android:textSize="18sp" />
 
 </RelativeLayout>

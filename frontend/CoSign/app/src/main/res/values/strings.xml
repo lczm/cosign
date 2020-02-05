@@ -18,4 +18,5 @@
     <string name="turn_on_off">Turn On/Off</string>
     <string name="set_your_goal">Set Your Goal</string>
     <string name="set_date">Set Date</string>
+    <string name="confirm">Confirm</string>
 </resources>

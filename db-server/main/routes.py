@@ -42,7 +42,8 @@ def register(form):
 def login(form):
     user = User.query.filter_by(email=form.email.data).first()
     if user and bcrypt.check_password_hash(user.password, form.password.data):
-        return '', 200
+        return jsonify({
+            'username': user.username})
     return jsonify({'error': 'Invalid Email or Password'}), 400
 
 @app.route('/learn', methods=['POST'])

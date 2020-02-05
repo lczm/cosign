@@ -45,7 +45,7 @@ while True:
     y = model.predict_proba([right_keypoints])
     yi = np.argsort(y[0])[::-1]
     glosses = [gloss_map[i] for i in yi]
-    scores = [y[i] for i in yi]
+    scores = [y[0][i] for i in yi]
     print(glosses)
 
     # Prepare for next

@@ -103,10 +103,10 @@ app = Flask(__name__)
 detection_graph, sess = load_inference_graph()
 
 # Loading pickle models
-with open('/home/cat/cosign/backend/rfc', 'rb') as file:
+with open('/home/cat/cosign/backend/models/full1-etc-e-f', 'rb') as file:
     model = pickle.load(file)
 
-with open('/home/cat/cosign/backend/gloss_map', 'rb') as file:
+with open('/home/cat/cosign/backend/gloss_maps/full1', 'rb') as file:
     gloss_map = pickle.load(file)
 
 @app.route('/')

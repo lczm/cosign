@@ -39,7 +39,7 @@ public final class Constants {
             signNames.add(Character.toString(alphabets.charAt(i)));
         }
 
-        signNames.add("Zero");
+        // signNames.add("Zero");
         signNames.add("One");
         signNames.add("Two");
         signNames.add("Three");
@@ -49,17 +49,17 @@ public final class Constants {
         signNames.add("Seven");
         signNames.add("Eight");
         signNames.add("Nine");
-        signNames.add("Ten");
-        signNames.add("Eleven");
-        signNames.add("Twelve");
-        signNames.add("Thirteen");
-        signNames.add("Fourteen");
-        signNames.add("Fifteen");
-        signNames.add("Sixteen");
-        signNames.add("Seventeen");
-        signNames.add("Eighteen");
-        signNames.add("Nineteen");
-        signNames.add("Twenty");
+        // signNames.add("Ten");
+        // signNames.add("Eleven");
+        // signNames.add("Twelve");
+        // signNames.add("Thirteen");
+        // signNames.add("Fourteen");
+        // signNames.add("Fifteen");
+        // signNames.add("Sixteen");
+        // signNames.add("Seventeen");
+        // signNames.add("Eighteen");
+        // signNames.add("Nineteen");
+        // signNames.add("Twenty");
         for (int i = 0; i < signNames.size(); i++) {
             signMapping.put(signNames.get(i), i+1);
             reverseSignMapping.put(i+1, signNames.get(i));

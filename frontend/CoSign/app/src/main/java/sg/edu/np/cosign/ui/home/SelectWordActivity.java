@@ -80,7 +80,9 @@ public class SelectWordActivity extends AppCompatActivity implements ItemAdapter
     {
         Intent in = new Intent(SelectWordActivity.this,
                 LearnSign.class);
-        in.putExtra("rowid", "" + position);
+        in.putExtra("pos", "" + position);
+        in.putExtra("wordOrNum", "word");
+        in.putExtra("data", data);
         startActivity(in);
     }
 }

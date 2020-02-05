@@ -6,8 +6,14 @@ import sg.edu.np.cosign.R;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Objects;
+
 
 public class LearnSign extends AppCompatActivity {
 
@@ -16,9 +22,26 @@ public class LearnSign extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learn_sign);
 
+        ImageView signIV = findViewById(R.id.signIV);
+
+
         Intent in = getIntent();
-        String x = in.getStringExtra("rowid");
-        ((TextView) findViewById(R.id.word_num_text)).setText(x);
+        String pos = in.getStringExtra("pos");
+        String signType = in.getStringExtra("wordOrNum");
+        ArrayList<String> data = in.getStringArrayListExtra("data");
+        String charOrNum = data.get(Integer.parseInt(pos));
+
+        if (Objects.equals(signType, "word"))
+        {
+            String imgName = "alpha" + charOrNum.toLowerCase();
+            signIV.setImageResource(getResources().getIdentifier(imgName, "drawable", this.getPackageName()));
+        }
+        else
+        {
+            String imgName = "num" + (Integer.parseInt(pos));
+            signIV.setImageResource(getResources().getIdentifier(imgName, "drawable", this.getPackageName()));
+        }
+        ((TextView) findViewById(R.id.word_num_text)).setText("This is how you sign " + charOrNum + "!");
     }
 
     public void sendToCamera(View view) {

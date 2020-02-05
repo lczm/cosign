@@ -75,6 +75,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             for (int i = 0; i < favourites.size(); i++) {
                 if (favourites.get(i) == position + 1) {
                     holder.favImgBtn.setImageResource(R.drawable.red_heart);
+                    break;
                 }
                 else
                 {
@@ -87,6 +88,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             for (int i = 0; i < favourites.size(); i++) {
                 if (favourites.get(i) == position + 1 + constants.jumpNumber) {
                     holder.favImgBtn.setImageResource(R.drawable.red_heart);
+                    break;
                 }
                 else
                 {

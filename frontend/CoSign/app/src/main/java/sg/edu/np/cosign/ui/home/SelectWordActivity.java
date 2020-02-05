@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class SelectWordActivity extends AppCompatActivity implements ItemAdapter.ItemClickListener {
 
     public ArrayList<String> data = new ArrayList<>();
+    public ArrayList<Integer> disabledAlphaPos = new ArrayList<>();
     TextView txt;
     ItemAdapter adapter;
 
@@ -34,7 +35,8 @@ public class SelectWordActivity extends AppCompatActivity implements ItemAdapter
         txt.setText("Alphabets");
 
         //populating ListView
-        data=new ArrayList<>();
+        disabledAlphaPos.add(9);
+        disabledAlphaPos.add(25);
         data.add("A");
         data.add("B");
         data.add("C");
@@ -44,7 +46,7 @@ public class SelectWordActivity extends AppCompatActivity implements ItemAdapter
         data.add("G");
         data.add("H");
         data.add("I");
-        data.add("J");
+        data.add("J"); // this
         data.add("K");
         data.add("L");
         data.add("M");
@@ -60,7 +62,7 @@ public class SelectWordActivity extends AppCompatActivity implements ItemAdapter
         data.add("W");
         data.add("X");
         data.add("Y");
-        data.add("Z");
+        data.add("Z"); // this
 
         RecyclerView rv = findViewById(R.id.wordRV);
         rv.setHasFixedSize(true);
@@ -78,11 +80,13 @@ public class SelectWordActivity extends AppCompatActivity implements ItemAdapter
     @Override
     public void onItemClick(View view, int position)
     {
-        Intent in = new Intent(SelectWordActivity.this,
-                LearnSign.class);
-        in.putExtra("pos", "" + position);
-        in.putExtra("wordOrNum", "word");
-        in.putExtra("data", data);
-        startActivity(in);
+        if (!disabledAlphaPos.contains(position)){
+            Intent in = new Intent(SelectWordActivity.this,
+                    LearnSign.class);
+            in.putExtra("pos", "" + position);
+            in.putExtra("wordOrNum", "word");
+            in.putExtra("data", data);
+            startActivity(in);
+        }
     }
 }

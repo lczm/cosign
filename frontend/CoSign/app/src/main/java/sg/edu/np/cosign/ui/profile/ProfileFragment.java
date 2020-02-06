@@ -2,6 +2,7 @@ package sg.edu.np.cosign.ui.profile;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,7 @@ public class ProfileFragment extends Fragment {
         });*/
         final EditText eText= root.findViewById(R.id.Date_editor);
         final EditText goal_edit= root.findViewById(R.id.goal_et);
+        goal_edit.setFilters(new InputFilter[]{ new MaxMinClass("1", "36")});
         eText.setInputType(InputType.TYPE_NULL);
         eText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +67,7 @@ public class ProfileFragment extends Fragment {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                eText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                eText.setText(dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year);
                             }
                         }, year, month, day);
                 picker.show();

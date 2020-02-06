@@ -1,4 +1,4 @@
-package sg.edu.np.cosign.ui;
+package sg.edu.np.cosign.ui.statistics;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,68 +12,57 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import sg.edu.np.cosign.Classes.Constants;
 import sg.edu.np.cosign.R;
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
-
-    // data for recyclerview e.g. A B C D E F G or liek 1 2 3 4 5 6
+public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.MyViewHolder> {
     private List<String> mData;
-    // dunnid to care
     private LayoutInflater mInflater;
-    // when u click smth
-    private ItemClickListener mClickListener;
-    // this is like a mini database we using it to store like email n password in it so we cn access from other activity
+    private FavItemClickListener mClickListener;
     private SharedPreferences prefs;
-    // zeming stuff
     private Constants constants = new Constants();
-    // what u favourited
     private ArrayList<Integer> favourites = new ArrayList<>();
-    private String activityName;
+    private ArrayList<Integer> sign_ids = new ArrayList<>();
     private Context context;
+    private boolean numbersOrNot;
 
     // data is passed into the constructor
-    public ItemAdapter(Context context, List<String> data, String activityName) {
+    public FavouriteAdapter(Context context, List<String> data, boolean numbers) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
-        this.activityName = activityName;
         this.context = context;
+        this.numbersOrNot = numbers;
         prefs = context.getSharedPreferences("userData", 0);
         String email = prefs.getString("email", "No email");
         String password = prefs.getString("password", "No Password");
         favourites = constants.getFavourite(email, password);
+        for (int i = 0; i < mData.size(); i++)
+        {
+            Integer convertedId = constants.signMapping.get(mData.get(i));
+            sign_ids.add(convertedId);
+        }
+
     }
 
     // inflates the row layout from xml when needed
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.rv_item, parent, false);
-        return new ViewHolder(view);
+        return new MyViewHolder(view);
     }
 
     // binds the data to the TextView in each row
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, int position) {
         String animal = mData.get(position);
         holder.itemTV.setText(animal);
-        if (activityName == "Word") {
+        if (!numbersOrNot) {
             holder.positionTV.setText(Integer.toString(position + 1));
             for (int i = 0; i < favourites.size(); i++) {
-                if (favourites.get(i) == position + 1) {
+                if (sign_ids.contains(favourites.get(i))) {
                     holder.favImgBtn.setImageResource(R.drawable.red_heart);
                     break;
                 }
@@ -83,10 +72,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                 }
             }
         }
-        else if (activityName == "Number") {
+        else {
             holder.positionTV.setText(Integer.toString(position + 1 + constants.jumpNumber));
             for (int i = 0; i < favourites.size(); i++) {
-                if (favourites.get(i) == position + 1 + constants.jumpNumber) {
+                if (sign_ids.contains(favourites.get(i))) {
                     holder.favImgBtn.setImageResource(R.drawable.red_heart);
                     break;
                 }
@@ -104,13 +93,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         return mData.size();
     }
 
+
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView itemTV;
         TextView positionTV;
         ImageButton favImgBtn;
 
-        ViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             positionTV = itemView.findViewById(R.id.rowNum);
             itemTV = itemView.findViewById(R.id.learnItem);
@@ -118,7 +108,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             favImgBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (activityName == "Word") {
+                    if (!numbersOrNot) {
                         if (favourites.contains(getAdapterPosition() + 1)) {
                             // Logging
                             Log.d("DEBUG", "Removing from Favourites");
@@ -146,9 +136,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                             }
                             favourites.add(getAdapterPosition() + 1);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         if (favourites.contains(getAdapterPosition() + 1 + constants.jumpNumber)) {
                             // Logging
                             Log.d("DEBUG", "Removing from Favourites");
@@ -164,7 +152,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                             favourites.remove(Integer.valueOf(getAdapterPosition() + 1 + constants.jumpNumber));
                         } else {
                             // Logging
-                            Log.d("DEBUG", "Adding to Favourites");
+                            Log.d("DEBUG", "Adding to Favourites ");
                             favImgBtn.setImageResource(R.drawable.red_heart);
                             String email = prefs.getString("email", "No email");
                             String password = prefs.getString("password", "No Password");
@@ -180,7 +168,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                 }
             });
             itemView.setOnClickListener(this);
-
         }
 
         @Override
@@ -195,12 +182,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     }
 
     // allows clicks events to be caught
-    public void setClickListener(ItemClickListener itemClickListener) {
+    void setClickListener(FavItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
     // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
+    public interface FavItemClickListener {
         void onItemClick(View view, int position);
     }
 }

@@ -2,6 +2,7 @@ package sg.edu.np.cosign.ui.statistics;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,7 @@ public class StatisticsBarFragment extends Fragment {
     private ArrayList getData(){
         ArrayList<BarEntry> entries = new ArrayList<>();
         prefs = getContext().getSharedPreferences("userData", 0);
+        // String username = prefs.getString("username", "No Username");
         String email = prefs.getString("email", "No email");
         String password = prefs.getString("password", "No Password");
         ArrayList<Integer> favourites = constants.getFavourite(email, password);

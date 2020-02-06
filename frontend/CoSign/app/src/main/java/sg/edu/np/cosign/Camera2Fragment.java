@@ -66,6 +66,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -240,6 +241,8 @@ public class Camera2Fragment extends Fragment
      */
     private ImageReader mImageReader;
 
+    private static boolean done;
+
     /**
      * This is the output file for our picture.
      */
@@ -248,7 +251,10 @@ public class Camera2Fragment extends Fragment
     private String email;
     private String password;
 
+    private static String answer;
+
     private Constants constants = new Constants();
+
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
@@ -267,45 +273,51 @@ public class Camera2Fragment extends Fragment
            // }
            //  i.putExtra("answer", answer);
 
-            Random r = new Random();
-            int randomInt = r.nextInt(101);
-            if (randomInt < 81)
-            {
-                i.putExtra("result", "I think you signed " + signInstruction + "!");
-                try {
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("email", email);
-                        jsonObject.put("password", password);
-                        jsonObject.put("sign_id", constants.signMapping.get(signInstruction));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-                    RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+      //      Random r = new Random();
+      //      int randomInt = r.nextInt(101);
+      //      if (randomInt < 81)
+      //      {
+      //          i.putExtra("result", "I think you signed " + signInstruction + "!");
+      //          try {
+      //              JSONObject jsonObject = new JSONObject();
+      //              try {
+      //                  jsonObject.put("email", email);
+      //                  jsonObject.put("password", password);
+      //                  jsonObject.put("sign_id", constants.signMapping.get(signInstruction));
+      //              } catch (JSONException e) {
+      //                  e.printStackTrace();
+      //              }
+      //              MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+      //              RequestBody body = RequestBody.create(JSON, jsonObject.toString());
 
-                    OkHttpClient client = new OkHttpClient();
-                    Request request = new Request.Builder()
-                            .url(Constants.serverIP + Constants.databasePort + "/learn")
-                            .post(body)
-                            .build();
+      //              OkHttpClient client = new OkHttpClient();
+      //              Request request = new Request.Builder()
+      //                      .url(Constants.serverIP + Constants.databasePort + "/learn")
+      //                      .post(body)
+      //                      .build();
 
-                    Response response = client.newCall(request).execute();
-                    int responseCode = response.code();
-                    if (responseCode == 200) {
-                        Log.d("DEBUG", "Successful");
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            else
-            {
-                i.putExtra("result", "I am sorry i didn't understand i am a failure of a model");
-            }
+      //              Response response = client.newCall(request).execute();
+      //              int responseCode = response.code();
+      //              if (responseCode == 200) {
+      //                  Log.d("DEBUG", "Successful");
+      //              }
+      //          } catch (IOException e) {
+      //              e.printStackTrace();
+      //          }
+      //      }
+      //      else
+      //      {
+      //          i.putExtra("result", "I am sorry i didn't understand i am a failure of a model");
+      //      }
 
             i.putExtra("capturedImg", mFile);
-            startActivity(i);
+
+            while (done) {
+                done = false;
+                Log.d("answer", "i am working");
+                i.putExtra("answer", answer);
+                startActivity(i);
+            }
         }
 
     };
@@ -459,8 +471,11 @@ public class Camera2Fragment extends Fragment
             Response response = client.newCall(request).execute();
             String responseJSON = response.body().string();
 
-            Log.d("DEBUG", "uploadImage:"+responseJSON);
 
+            Log.d("DEBUG", "uploadImage:"+responseJSON);
+            Log.d("answer reponse", response.toString());
+
+            done = true;
 
             return new JSONObject(responseJSON);
 
@@ -1045,7 +1060,7 @@ public class Camera2Fragment extends Fragment
             try {
                 output = new FileOutputStream(mFile);
                 output.write(bytes);
-                uploadImage(bytes);
+                answerJSON = uploadImage(bytes);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -1059,8 +1074,13 @@ public class Camera2Fragment extends Fragment
                     }
                 }
             }
-
-
+            try {
+                answer = answerJSON.getString("answer");
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
 
 
         }

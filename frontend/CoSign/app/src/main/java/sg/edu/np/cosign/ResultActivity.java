@@ -35,7 +35,7 @@ public class ResultActivity extends AppCompatActivity {
 
         File img = (File)getIntent().getExtras().get("capturedImg");
         //String answer = (String)getIntent().getExtras().get("answer");
-        String result = (String)getIntent().getExtras().get("result");
+        String result = (String)getIntent().getExtras().get("answer");
 
 
         if(img.exists()){

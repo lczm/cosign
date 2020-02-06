@@ -36,13 +36,14 @@ import sg.edu.np.cosign.R;
 import sg.edu.np.cosign.ui.ItemAdapter;
 import sg.edu.np.cosign.ui.home.LearnSign;
 import sg.edu.np.cosign.ui.home.SelectWordActivity;
+import sg.edu.np.cosign.ui.statistics.FavouriteAdapter;
 
 public class FavouriteFragment extends Fragment implements ItemAdapter.ItemClickListener{
 
     private FavouriteViewModel favouriteViewModel;
     private Constants constants = new Constants();
     SharedPreferences prefs;
-    ItemAdapter adapter;
+    FavouriteAdapter adapter;
 
     public ArrayList<String> allAlpha = new ArrayList<>();
     public ArrayList<String> allNumber = new ArrayList<>();
@@ -53,6 +54,7 @@ public class FavouriteFragment extends Fragment implements ItemAdapter.ItemClick
     //public ArrayList<String> getnumber = new ArrayList<>();
 
     RecyclerView favRV;
+    RecyclerView favNumRV;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -123,15 +125,26 @@ public class FavouriteFragment extends Fragment implements ItemAdapter.ItemClick
         allNumber.retainAll(allFav);
         allAlpha.retainAll(allFav);
 
-
+        //Alphabet recyclerView
         favRV = (RecyclerView) root.findViewById(R.id.favAlphaRV);
         favRV.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         favRV.setLayoutManager(layoutManager);
-        adapter = new ItemAdapter(this.getContext(), allAlpha, "Word");
+        adapter = new FavouriteAdapter(this.getContext(), allAlpha, false);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(favRV.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
         favRV.addItemDecoration(dividerItemDecoration);
         favRV.setAdapter(adapter);
+
+        //number recyclerView
+        favNumRV = (RecyclerView) root.findViewById(R.id.favNumberRV);
+        favNumRV.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManagerNumber = new LinearLayoutManager(this.getContext());
+        favNumRV.setLayoutManager(layoutManagerNumber);
+        adapter = new FavouriteAdapter(this.getContext(), allNumber, true);
+        DividerItemDecoration dividerItemDecorationNumber = new DividerItemDecoration(favNumRV.getContext(), ((LinearLayoutManager) layoutManagerNumber).getOrientation());
+        favNumRV.addItemDecoration(dividerItemDecoration);
+        favNumRV.setAdapter(adapter);
+
 
 
 

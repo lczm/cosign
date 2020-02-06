@@ -70,13 +70,14 @@ def goal(form, user):
     goal_id = form.goal_id.data
     if goal_id == -1:
         goal = Goal(
+            user_id=user.user_id,
             date=form.date.data, 
             amount=form.amount.data)
         db.session.add(goal)
     else:
         goal = Goal.query.get(goal_id)
-        if not goal:
-            jsonify({'error': 'Goal does not exist'}), 400
+        if not goal or goal.user_id != user.user_id:
+            return jsonify({'error': 'Goal does not exist'}), 400
         goal.date = form.date.data
         goal.amount = form.amount.data
     db.session.commit()

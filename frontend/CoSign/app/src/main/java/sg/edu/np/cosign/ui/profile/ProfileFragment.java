@@ -1,9 +1,11 @@
 package sg.edu.np.cosign.ui.profile;
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +29,16 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import sg.edu.np.cosign.Classes.Constants;
 import sg.edu.np.cosign.MainActivity;
 import sg.edu.np.cosign.R;
 
 public class ProfileFragment extends Fragment {
 
     private ProfileViewModel profileViewModel;
+    private Constants constants = new Constants();
+
+    SharedPreferences prefs;
     DatePickerDialog picker;
     EditText eText, goal_edit;
     Button btnGet;
@@ -51,6 +57,7 @@ public class ProfileFragment extends Fragment {
                 textView.setText(s);
             }
         });*/
+
         final EditText eText= root.findViewById(R.id.Date_editor);
         final EditText goal_edit= root.findViewById(R.id.goal_et);
         goal_edit.setFilters(new InputFilter[]{ new MaxMinClass("1", "36")});
@@ -80,6 +87,13 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 TextView tvw = getView().findViewById(R.id.textView1);
                 tvw.setText("Selected Date: "+ eText.getText() + ", Goal: " + goal_edit.getText());
+
+                prefs = getContext().getSharedPreferences("userData", 0);
+                String email = prefs.getString("email", "No email");
+                String password = prefs.getString("password", "No Password");
+                Integer amount = Integer.valueOf(goal_edit.getText().toString());
+                String date = eText.getText().toString();
+                constants.setGoals(email, password, amount, date);
             }
         });
         aSwitch = root.findViewById(R.id.Noti_switch);
@@ -94,6 +108,8 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), "Notification :" + statusSwitch, Toast.LENGTH_LONG).show();
             }
         });
+
+
         return root;
     }
 }

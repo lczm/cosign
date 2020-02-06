@@ -62,4 +62,5 @@ public class ResultActivity extends AppCompatActivity {
         Intent toNumSelect = new Intent(ResultActivity.this, SelectNumActivity.class);
         ResultActivity.this.startActivity(toNumSelect);
     }
+
 }

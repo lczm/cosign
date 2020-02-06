@@ -53,6 +53,7 @@ public class FavouriteFragment extends Fragment implements ItemAdapter.ItemClick
     //public ArrayList<String> getnumber = new ArrayList<>();
 
     RecyclerView favRV;
+    RecyclerView favNumRV;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -123,7 +124,7 @@ public class FavouriteFragment extends Fragment implements ItemAdapter.ItemClick
         allNumber.retainAll(allFav);
         allAlpha.retainAll(allFav);
 
-
+        //Alphabet recyclerView
         favRV = (RecyclerView) root.findViewById(R.id.favAlphaRV);
         favRV.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
@@ -132,6 +133,17 @@ public class FavouriteFragment extends Fragment implements ItemAdapter.ItemClick
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(favRV.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
         favRV.addItemDecoration(dividerItemDecoration);
         favRV.setAdapter(adapter);
+
+        //number recyclerView
+        favNumRV = (RecyclerView) root.findViewById(R.id.favNumberRV);
+        favNumRV.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManagerNumber = new LinearLayoutManager(this.getContext());
+        favNumRV.setLayoutManager(layoutManagerNumber);
+        adapter = new ItemAdapter(this.getContext(), allNumber, "Number");
+        DividerItemDecoration dividerItemDecorationNumber = new DividerItemDecoration(favNumRV.getContext(), ((LinearLayoutManager) layoutManagerNumber).getOrientation());
+        favNumRV.addItemDecoration(dividerItemDecoration);
+        favNumRV.setAdapter(adapter);
+
 
 
 

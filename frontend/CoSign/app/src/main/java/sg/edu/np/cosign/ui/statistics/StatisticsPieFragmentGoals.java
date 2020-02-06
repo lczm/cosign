@@ -3,6 +3,7 @@ package sg.edu.np.cosign.ui.statistics;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,9 @@ public class StatisticsPieFragmentGoals extends Fragment {
         String email = prefs.getString("email", "No email");
         String password = prefs.getString("password", "No Password");
         ArrayList<Integer> learntIds = constants.getLearntIds(email, password);
+
+        Integer test = constants.getGoals(email, password);
+        Log.d("DEBUG", "Hi" + test);
 
         entries.add(new PieEntry(learntIds.size(), "Learnt"));
         entries.add(new PieEntry(20 - learntIds.size(), "Want to learn"));

@@ -230,4 +230,38 @@ public final class Constants {
         Log.d("DEBUG", "Un-Successful");
         return null;
     }
+
+    public boolean setGoals(String email, String password, Integer amount, String date) {
+        ArrayList<Integer> returnGoal = new ArrayList<Integer>();
+        try {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("email", email);
+                jsonObject.put("password", password);
+                jsonObject.put("goal_id", -1);
+                jsonObject.put("amount", amount);
+                jsonObject.put("date", date);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(Constants.serverIP + Constants.databasePort + "/goal")
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            int responseCode = response.code();
+            if (responseCode == 200) {
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d("DEBUG", "Un-Successful");
+        return false;
+    }
 }

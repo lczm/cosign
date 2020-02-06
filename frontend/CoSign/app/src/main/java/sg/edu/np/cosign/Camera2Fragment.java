@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -195,6 +196,7 @@ public class Camera2Fragment extends Fragment
     private Size mPreviewSize;
 
     private String correctWord;
+    static HashMap<String, String> stringNums = new HashMap<String, String>();
 
     /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
@@ -251,12 +253,14 @@ public class Camera2Fragment extends Fragment
      */
     private File mFile;
 
-    private String email;
-    private String password;
+    private static String email;
+    private static String password;
+
+    private static String signedSign;
 
     private static String answer;
 
-    private Constants constants = new Constants();
+    private static Constants constants = new Constants();
 
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
@@ -265,9 +269,19 @@ public class Camera2Fragment extends Fragment
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
             = new ImageReader.OnImageAvailableListener() {
 
+
         @Override
         public void onImageAvailable(ImageReader reader) {
             ImageSaver is = new ImageSaver(reader.acquireLatestImage(), mFile);
+            stringNums.put("1","One");
+            stringNums.put("2","Two");
+            stringNums.put("3","Three");
+            stringNums.put("4","Four");
+            stringNums.put("5","Five");
+            stringNums.put("6","Six");
+            stringNums.put("7","Seven");
+            stringNums.put("8","Eight");
+            stringNums.put("9","Nine");
             //mBackgroundHandler.post(is);
             is.run();
             Intent i = new Intent(getActivity(), ResultActivity.class);
@@ -283,32 +297,6 @@ public class Camera2Fragment extends Fragment
       //      if (randomInt < 81)
       //      {
       //          i.putExtra("result", "I think you signed " + signInstruction + "!");
-      //          try {
-      //              JSONObject jsonObject = new JSONObject();
-      //              try {
-      //                  jsonObject.put("email", email);
-      //                  jsonObject.put("password", password);
-      //                  jsonObject.put("sign_id", constants.signMapping.get(signInstruction));
-      //              } catch (JSONException e) {
-      //                  e.printStackTrace();
-      //              }
-      //              MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-      //              RequestBody body = RequestBody.create(JSON, jsonObject.toString());
-
-      //              OkHttpClient client = new OkHttpClient();
-      //              Request request = new Request.Builder()
-      //                      .url(Constants.serverIP + Constants.databasePort + "/learn")
-      //                      .post(body)
-      //                      .build();
-
-      //              Response response = client.newCall(request).execute();
-      //              int responseCode = response.code();
-      //              if (responseCode == 200) {
-      //                  Log.d("DEBUG", "Successful");
-      //              }
-      //          } catch (IOException e) {
-      //              e.printStackTrace();
-      //          }
       //      }
       //      else
       //      {
@@ -363,7 +351,7 @@ public class Camera2Fragment extends Fragment
 
     private static JSONObject answerJSON;
 
-    private String signInstruction;
+    private static String signInstruction;
 
     TextView signInstructionTV;
 
@@ -1086,9 +1074,89 @@ public class Camera2Fragment extends Fragment
                             answer = "Sorry, I didn't recognize what you signed. Press back to try again!";
                         }
                         else {
+                            boolean isNum;
+                            String tempAnswer = answerJSON.getString("answer").toUpperCase();
                             answer = "I think you signed " + answerJSON.getString("answer") + "!";
+                            try {
+                                Integer.parseInt(tempAnswer);
+                                isNum = true;
+                            }
+                            catch(NumberFormatException e)
+                            {
+                                isNum = false;
+                                e.printStackTrace();
+                            }
+                            Log.d("Signinstruction", signInstruction);
+                            Log.d("tempanswer", tempAnswer);
+
+                            if (!isNum){
+                                if (tempAnswer.equals(signInstruction.toUpperCase())) {
+                                    try {
+                                        JSONObject jsonObject = new JSONObject();
+                                        try {
+                                            jsonObject.put("email", email);
+                                            jsonObject.put("password", password);
+                                            jsonObject.put("sign_id", constants.signMapping.get(answerJSON.getString("answer")));
+                                            Log.d("jsonObject", jsonObject.toString());
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                                        RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+                                        OkHttpClient client = new OkHttpClient();
+                                        Request request = new Request.Builder()
+                                                .url(Constants.serverIP + Constants.databasePort + "/learn")
+                                                .post(body)
+                                                .build();
+
+                                        Response response = client.newCall(request).execute();
+                                        int responseCode = response.code();
+                                        if (responseCode == 200) {
+                                            Log.d("DEBUG", "Successful");
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        else
+                        {
+                            if (signInstruction.equals(stringNums.get(tempAnswer)))
+                            {
+
+                                try {
+                                    JSONObject jsonObject = new JSONObject();
+                                    try {
+                                        jsonObject.put("email", email);
+                                        jsonObject.put("password", password);
+                                        jsonObject.put("sign_id", constants.signMapping.get(answerJSON.getString("answer")));
+                                        Log.d("jsonObject", jsonObject.toString());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                                    RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+                                    OkHttpClient client = new OkHttpClient();
+                                    Request request = new Request.Builder()
+                                            .url(Constants.serverIP + Constants.databasePort + "/learn")
+                                            .post(body)
+                                            .build();
+
+                                    Response response = client.newCall(request).execute();
+                                    int responseCode = response.code();
+                                    if (responseCode == 200) {
+                                        Log.d("DEBUG", "Successful");
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                            }
                         }
-                    }
+                        }
             }
             catch (JSONException e)
             {

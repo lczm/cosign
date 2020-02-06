@@ -2,6 +2,7 @@ package sg.edu.np.cosign.ui.home;
 
 import androidx.appcompat.app.AppCompatActivity;
 import sg.edu.np.cosign.Camera2Activity;
+import sg.edu.np.cosign.Classes.Constants;
 import sg.edu.np.cosign.R;
 
 import android.content.Intent;
@@ -18,6 +19,7 @@ import java.util.Objects;
 public class LearnSign extends AppCompatActivity {
 
     String charOrNum;
+    Constants constants = new Constants();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

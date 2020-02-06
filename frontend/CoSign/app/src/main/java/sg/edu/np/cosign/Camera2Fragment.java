@@ -194,6 +194,8 @@ public class Camera2Fragment extends Fragment
      */
     private Size mPreviewSize;
 
+    private String correctWord;
+
     /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
      */
@@ -1081,7 +1083,7 @@ public class Camera2Fragment extends Fragment
                     Iterator<String> keys = answerJSON.keys();
                     while (keys.hasNext()) {
                         if (keys.next().equals("error")) {
-                            answer = "Sorry, I didn't recognize what you signed. Try again!";
+                            answer = "Sorry, I didn't recognize what you signed. Press back to try again!";
                         }
                         else {
                             answer = "I think you signed " + answerJSON.getString("answer") + "!";

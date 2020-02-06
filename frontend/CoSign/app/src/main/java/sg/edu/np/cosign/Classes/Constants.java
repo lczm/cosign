@@ -217,8 +217,10 @@ public final class Constants {
                     JSONObject goals = (JSONObject)responseJson.get("goals");
                     Iterator<String> keys = goals.keys();
                     while(keys.hasNext()) {
-                        returnGoal.add(Integer.parseInt(keys.next()));
+                        JSONObject amountKey = (JSONObject)goals.get(keys.next());
+                        returnGoal.add(Integer.parseInt(amountKey.get("amount").toString()));
                     }
+                    Log.d("DEBUG", returnGoal.get(returnGoal.size() - 1).toString());
                     return returnGoal.get(returnGoal.size() - 1);
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -69,7 +69,7 @@ public class StatisticsPieFragmentGoals extends Fragment {
         Log.d("DEBUG", "Hi" + test);
 
         entries.add(new PieEntry(learntIds.size(), "Learnt"));
-        entries.add(new PieEntry(20 - learntIds.size(), "Want to learn"));
+        entries.add(new PieEntry(constants.getGoals(email, password) - learntIds.size(), "Want to learn"));
 
         return entries;
     }

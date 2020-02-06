@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
@@ -264,7 +265,9 @@ public class Camera2Fragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireLatestImage(), mFile));
+            ImageSaver is = new ImageSaver(reader.acquireLatestImage(), mFile);
+            //mBackgroundHandler.post(is);
+            is.run();
             Intent i = new Intent(getActivity(), ResultActivity.class);
            // try {
            //     answerJSON.get("answer").toString();
@@ -1075,7 +1078,15 @@ public class Camera2Fragment extends Fragment
                 }
             }
             try {
-                answer = answerJSON.getString("answer");
+                    Iterator<String> keys = answerJSON.keys();
+                    while (keys.hasNext()) {
+                        if (keys.next().equals("error")) {
+                            answer = "Sorry, I didn't recognize what you signed. Try again!";
+                        }
+                        else {
+                            answer = "I think you signed " + answerJSON.getString("answer") + "!";
+                        }
+                    }
             }
             catch (JSONException e)
             {

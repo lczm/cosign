@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
         layoutManager = new GridLayoutManager(getActivity(),2);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-        Log.d("fukass", images.toString());
+        Log.d("aaa", images.toString());
         //CategoryAdapter adapter = new CategoryAdapter(images);
         //  recyclerView.setAdapter(adapter);
          */

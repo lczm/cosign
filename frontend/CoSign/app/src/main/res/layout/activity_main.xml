@@ -21,7 +21,6 @@
         app:srcCompat="@drawable/logo" />
 
     <TextView
-        android:id="@+id/projNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pacifico"
@@ -46,7 +45,7 @@
         android:layout_marginBottom="5dp"
         android:backgroundTint="#E9ECEA"
         android:ems="10"
-        android:hint="E-mail/Username"
+        android:hint="E-mail"
         android:inputType="textPersonName"
         android:text="cosign@gmail.com"
         android:textColor="#E9ECEA"

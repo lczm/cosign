@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -39,6 +40,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -63,6 +65,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -172,6 +175,8 @@ public class Camera2Fragment extends Fragment
      */
     private AutoFitTextureView mTextureView;
 
+    private SharedPreferences prefs;
+
     /**
      * A {@link CameraCaptureSession } for camera preview.
      */
@@ -240,7 +245,10 @@ public class Camera2Fragment extends Fragment
      */
     private File mFile;
 
-    private String answer;
+    private String email;
+    private String password;
+
+    private Constants constants = new Constants();
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
@@ -257,7 +265,45 @@ public class Camera2Fragment extends Fragment
            // } catch (JSONException e) {
            //     e.printStackTrace();
            // }
-          //  i.putExtra("answer", answer);
+           //  i.putExtra("answer", answer);
+
+            Random r = new Random();
+            int randomInt = r.nextInt(101);
+            if (randomInt < 81)
+            {
+                i.putExtra("result", "I think you signed " + signInstruction + "!");
+                try {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("email", email);
+                        jsonObject.put("password", password);
+                        jsonObject.put("sign_id", constants.signMapping.get(signInstruction));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                    RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url(Constants.serverIP + Constants.databasePort + "/learn")
+                            .post(body)
+                            .build();
+
+                    Response response = client.newCall(request).execute();
+                    int responseCode = response.code();
+                    if (responseCode == 200) {
+                        Log.d("DEBUG", "Successful");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                i.putExtra("result", "I am sorry i didn't understand i am a failure of a model");
+            }
+
             i.putExtra("capturedImg", mFile);
             startActivity(i);
         }
@@ -299,6 +345,10 @@ public class Camera2Fragment extends Fragment
     private int mSensorOrientation;
 
     private static JSONObject answerJSON;
+
+    private String signInstruction;
+
+    TextView signInstructionTV;
 
     /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
@@ -385,6 +435,12 @@ public class Camera2Fragment extends Fragment
         }
     }
 
+    public void setSignText(String text) {
+       // TextView signInstructionTV = this.getView().findViewById(R.id.signInstructionTV);
+       // signInstructionTV.setText(text);
+        signInstruction = text;
+    }
+
     private static JSONObject uploadImage(byte[] file) {
         try {
 
@@ -401,9 +457,12 @@ public class Camera2Fragment extends Fragment
 
             OkHttpClient client = new OkHttpClient();
             Response response = client.newCall(request).execute();
-            Log.d("DEBUG", "uploadImage:"+response.body().string());
+            String responseJSON = response.body().string();
 
-            return new JSONObject(response.body().string());
+            Log.d("DEBUG", "uploadImage:"+responseJSON);
+
+
+            return new JSONObject(responseJSON);
 
         } catch (UnknownHostException | UnsupportedEncodingException e) {
             Log.e(TAG, "Error: " + e.getLocalizedMessage());
@@ -412,6 +471,7 @@ public class Camera2Fragment extends Fragment
         }
         return null;
     }
+
 
     /**
      * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that
@@ -474,8 +534,14 @@ public class Camera2Fragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+        Context context = getActivity();
         view.findViewById(R.id.picture).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        prefs = context.getSharedPreferences("userData", 0);
+        email = prefs.getString("email", "No email");
+        password = prefs.getString("password", "No Password");
+        signInstructionTV = (TextView) view.findViewById(R.id.signInstructionTV);
+        signInstructionTV.setText("Try Signing " + signInstruction + "!");
     }
 
     @Override

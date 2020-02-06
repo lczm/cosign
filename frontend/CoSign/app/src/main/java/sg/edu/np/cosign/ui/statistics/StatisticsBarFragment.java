@@ -1,5 +1,6 @@
 package sg.edu.np.cosign.ui.statistics;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -20,12 +22,15 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 
+import sg.edu.np.cosign.Classes.Constants;
 import sg.edu.np.cosign.R;
 
 // Instances of this class are fragments representing a single
 // object in our collection.
 public class StatisticsBarFragment extends Fragment {
     public static final String ARG_OBJECT = "object";
+    public Constants constants = new Constants();
+    private SharedPreferences prefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -44,8 +49,9 @@ public class StatisticsBarFragment extends Fragment {
         BarData barData = new BarData(barDataset);
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
         // x-axis labels
-        final String[] xAxisLabels = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun"};
+        final String[] xAxisLabels = new String[]{"Bookmarks", "Learnt"};
         IndexAxisValueFormatter formatter = new IndexAxisValueFormatter(xAxisLabels);
         xAxis.setGranularity(1f);
         xAxis.setValueFormatter(formatter);
@@ -55,6 +61,7 @@ public class StatisticsBarFragment extends Fragment {
         barChart.setData(barData);
         barChart.setFitBars(true);
         barChart.animateXY(800, 800);
+        barChart.setVisibleYRange(0, 20, YAxis.AxisDependency.LEFT);
         barChart.invalidate();
         barChart.setDoubleTapToZoomEnabled(false);
         return barView;
@@ -71,12 +78,14 @@ public class StatisticsBarFragment extends Fragment {
 
     private ArrayList getData(){
         ArrayList<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 30f));
-        entries.add(new BarEntry(1f, 80f));
-        entries.add(new BarEntry(2f, 60f));
-        entries.add(new BarEntry(3f, 50f));
-        entries.add(new BarEntry(4f, 70f));
-        entries.add(new BarEntry(5f, 60f));
+        prefs = getContext().getSharedPreferences("userData", 0);
+        String email = prefs.getString("email", "No email");
+        String password = prefs.getString("password", "No Password");
+        ArrayList<Integer> favourites = constants.getFavourite(email, password);
+        ArrayList<Integer> learntIds = constants.getLearntIds(email, password);
+
+        entries.add(new BarEntry(0f, favourites.size()));
+        entries.add(new BarEntry(1f, learntIds.size()));
         return entries;
     }
 }

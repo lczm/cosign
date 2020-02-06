@@ -13,7 +13,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:rotation="180"
         android:scaleType="fitCenter" />
 
     <TextView
@@ -25,25 +24,30 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="161dp"
         android:layout_marginTop="37dp"
+        android:text="test"
         android:textAlignment="center"
         android:textSize="24sp" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/directToAlphaBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="71dp"
-        android:text="Button" />
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="1dp"
+        android:onClick="toAlphaSelect"
+        android:text="Learn Alphabets" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/directToNumBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="72dp"
-        android:text="Button" />
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="1dp"
+        android:onClick="toNumSelect"
+        android:text="Learn Numbers" />
 
 </RelativeLayout>

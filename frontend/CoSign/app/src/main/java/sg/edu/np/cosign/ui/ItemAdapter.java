@@ -31,11 +31,17 @@ import sg.edu.np.cosign.R;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
+    // data for recyclerview e.g. A B C D E F G or liek 1 2 3 4 5 6
     private List<String> mData;
+    // dunnid to care
     private LayoutInflater mInflater;
+    // when u click smth
     private ItemClickListener mClickListener;
+    // this is like a mini database we using it to store like email n password in it so we cn access from other activity
     private SharedPreferences prefs;
+    // zeming stuff
     private Constants constants = new Constants();
+    // what u favourited
     private ArrayList<Integer> favourites = new ArrayList<>();
     private String activityName;
     private Context context;
@@ -50,7 +56,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         String email = prefs.getString("email", "No email");
         String password = prefs.getString("password", "No Password");
         favourites = constants.getFavourite(email, password);
-        Log.d("DEBUG", favourites.toString());
     }
 
     // inflates the row layout from xml when needed
@@ -69,7 +74,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             holder.positionTV.setText(Integer.toString(position + 1));
             for (int i = 0; i < favourites.size(); i++) {
                 if (favourites.get(i) == position + 1) {
-                    holder.favImgBtn.setBackgroundResource(R.drawable.red_heart);
+                    holder.favImgBtn.setImageResource(R.drawable.red_heart);
+                    break;
+                }
+                else
+                {
+                    holder.favImgBtn.setImageResource(R.drawable.black_heart);
                 }
             }
         }
@@ -77,7 +87,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             holder.positionTV.setText(Integer.toString(position + 1 + constants.jumpNumber));
             for (int i = 0; i < favourites.size(); i++) {
                 if (favourites.get(i) == position + 1 + constants.jumpNumber) {
-                    holder.favImgBtn.setBackgroundResource(R.drawable.red_heart);
+                    holder.favImgBtn.setImageResource(R.drawable.red_heart);
+                    break;
+                }
+                else
+                {
+                    holder.favImgBtn.setImageResource(R.drawable.black_heart);
                 }
             }
         }
@@ -107,7 +122,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                     {
                         // Logging
                         Log.d("DEBUG", "Removing from Favourites");
-                        v.setBackgroundResource(R.drawable.black_heart);
+                        favImgBtn.setImageResource(R.drawable.black_heart);
                         String email = prefs.getString("email", "No email");
                         String password = prefs.getString("password", "No Password");
                         boolean response = constants.postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);
@@ -121,7 +136,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                     } else {
                         // Logging
                         Log.d("DEBUG", "Adding to Favourites");
-                        v.setBackgroundResource(R.drawable.red_heart);
+                        favImgBtn.setImageResource(R.drawable.red_heart);
                         String email = prefs.getString("email", "No email");
                         String password = prefs.getString("password", "No Password");
                         boolean response = constants.postFavouriteToggle(constants.signMapping.get(itemTV.getText().toString()), email, password);

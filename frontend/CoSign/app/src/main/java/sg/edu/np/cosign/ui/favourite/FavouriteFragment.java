@@ -36,13 +36,14 @@ import sg.edu.np.cosign.R;
 import sg.edu.np.cosign.ui.ItemAdapter;
 import sg.edu.np.cosign.ui.home.LearnSign;
 import sg.edu.np.cosign.ui.home.SelectWordActivity;
+import sg.edu.np.cosign.ui.statistics.FavouriteAdapter;
 
 public class FavouriteFragment extends Fragment implements ItemAdapter.ItemClickListener{
 
     private FavouriteViewModel favouriteViewModel;
     private Constants constants = new Constants();
     SharedPreferences prefs;
-    ItemAdapter adapter;
+    FavouriteAdapter adapter;
 
     public ArrayList<String> allAlpha = new ArrayList<>();
     public ArrayList<String> allNumber = new ArrayList<>();
@@ -129,7 +130,7 @@ public class FavouriteFragment extends Fragment implements ItemAdapter.ItemClick
         favRV.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         favRV.setLayoutManager(layoutManager);
-        adapter = new ItemAdapter(this.getContext(), allAlpha, "Word");
+        adapter = new FavouriteAdapter(this.getContext(), allAlpha, false);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(favRV.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
         favRV.addItemDecoration(dividerItemDecoration);
         favRV.setAdapter(adapter);
@@ -139,7 +140,7 @@ public class FavouriteFragment extends Fragment implements ItemAdapter.ItemClick
         favNumRV.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManagerNumber = new LinearLayoutManager(this.getContext());
         favNumRV.setLayoutManager(layoutManagerNumber);
-        adapter = new ItemAdapter(this.getContext(), allNumber, "Number");
+        adapter = new FavouriteAdapter(this.getContext(), allNumber, true);
         DividerItemDecoration dividerItemDecorationNumber = new DividerItemDecoration(favNumRV.getContext(), ((LinearLayoutManager) layoutManagerNumber).getOrientation());
         favNumRV.addItemDecoration(dividerItemDecoration);
         favNumRV.setAdapter(adapter);
